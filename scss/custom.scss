@@ -1,18 +1,33 @@
 $primary: #1dbb3e;
 $secondary: #dadada;
 $success: #606060;
+$info: #f9f9fa;
 
 @import '../node_modules/bootstrap/scss/bootstrap';
 
+html {
+  font-family: Muli, sans-serif;
+  line-height: 1.15;
+}
+
 .logo {
-  margin: 10px 0 0 15px;
-  height: 35px;
+  margin: 1em 0 0 1.5em;
+  height: 2em;
 }
 
 .subtitle {
-  margin: 40px 0;
+  font-weight: 400;
+  margin: 1.8em 0;
 }
 
 .locations {
-  margin-top: 20px;
+  margin-top: 1.5em;
+}
+
+.choose-box {
+  width: 80%;
+}
+
+.non-profits {
+  font-size: 0.8em;
 }
