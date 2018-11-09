@@ -11,37 +11,42 @@
     <img class="logo" src="assets/logo-dark.png">
   </header>
   <body>
-    <div class="container">
-      <h3 class="subtitle">Where Would You Like to Advertise?</h3>
-      <h4 class="text-primary">Our Most Popular Locations:</h4>
-      <div class="card-group locations">
-        <div class="card text-center">
-          <img src="assets/sm-day.jpg">
-          Daytime Santa Monica
-        </div>
-        <div class="card text-center">
-          <img src="assets/hollywood-night.jpg">
-          Night Time Hollywood
-        </div>
-        <div class="card text-center">
-          <img src="assets/traffic-morning.jpg">
-          Morning Traffic
-        </div>
-      </div>
-      <div class="row justify-content-md-center">
-        <div class="alert alert-secondary text-center" role="alert">
-          Choose your time, place or car for advertising:
-          <hr>
-          <div>
-            <button type="button" class="btn btn-primary">Starting at $1</button>
+    <form>
+      <div class="container">
+        <h3 class="subtitle">Where Would You Like to Advertise?</h3>
+        <h4 class="text-primary">Our Most Popular Locations:</h4>
+        <div class="card-group locations">
+          <div class="card text-center">
+            <img src="assets/sm-day.jpg">
+            Daytime Santa Monica
+            <input type="radio" name="location" value="santa-monica">
           </div>
-          <hr>
-          <div class="non-profits">
-            For non-profits, community organizations or similar, please contact us directly about free advertising!
+          <div class="card text-center">
+            <img src="assets/hollywood-night.jpg">
+            Night Time Hollywood
+            <input type="radio" name="location" value="hollywood">
+          </div>
+          <div class="card text-center">
+            <img src="assets/traffic-morning.jpg">
+            Morning Traffic
+            <input type="radio" name="location" value="morning-traffic">
           </div>
         </div>
+        <div class="row justify-content-md-center">
+          <div class="alert alert-secondary text-center" role="alert">
+            Choose your time, place or car for advertising:
+            <hr>
+            <div>
+              <button type="button" class="btn btn-primary">Starting at $1</button>
+            </div>
+            <hr>
+            <div class="non-profits">
+              For non-profits, community organizations or similar, please contact us directly about free advertising!
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
+    </form>
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
