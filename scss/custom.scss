@@ -1,4 +1,8 @@
-@import "../node_modules/bootstrap/scss/bootstrap";
+$primary: #1dbb3e;
+$secondary: #dadada;
+$success: #606060;
+
+@import '../node_modules/bootstrap/scss/bootstrap';
 
 .logo {
   margin: 10px 0 0 15px;
