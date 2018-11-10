@@ -19,21 +19,21 @@
           <div class="card text-center">
             <img class="location-image" src="assets/sm-day.jpg">
             Daytime Santa Monica
-            <div>
+            <div class="pb-2">
               <input type="radio" name="location" value="santa-monica">
             </div>
           </div>
           <div class="card text-center">
             <img class="location-image" src="assets/hollywood-night.jpg">
             Night Time Hollywood
-            <div>
+            <div class="pb-2">
               <input type="radio" name="location" value="hollywood">
             </div>
           </div>
           <div class="card text-center">
             <img class="location-image" src="assets/traffic-morning.jpg">
             Morning Traffic
-            <div>
+            <div class="pb-2">
               <input type="radio" name="location" value="morning-traffic">
             </div>
           </div>
@@ -55,7 +55,17 @@
       <div class="container-fluid index-background mt-4">
         <div class="container text-info">
           <h3 class="pt-2 title">Add Your Advertisement</h3>
-          <input type="file" name="ad-asset" accept="image/*">
+          <input id="image-upload" type="file" name="ad-asset" accept="image/*">
+          <img id="preview-image" src="#" alt="">
+          <script>
+            document.getElementById('image-upload').addEventListener('change', function() {
+              var reader = new FileReader();
+              reader.onload = function(e) {
+                document.getElementById('preview-image').src = e.target.result;
+              }
+              reader.readAsDataURL(document.getElementById('image-upload').files[0]);
+            });
+          </script>
         </div>
       </div>
       <div class="container-fluid bg-info">
