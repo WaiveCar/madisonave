@@ -13,43 +13,59 @@
   <body>
     <form>
       <div class="container">
-        <h3 class="subtitle">Where Would You Like to Advertise?</h3>
-        <h4 class="text-primary">Our Most Popular Locations:</h4>
+        <h3 class="mt-4 mb-4 title">Where Would You Like to Advertise?</h3>
+        <h4 class="text-primary title ml-3">Our Most Popular Locations:</h4>
         <div class="card-group locations">
           <div class="card text-center">
-            <img src="assets/sm-day.jpg">
+            <img class="location-image" src="assets/sm-day.jpg">
             Daytime Santa Monica
             <div>
               <input type="radio" name="location" value="santa-monica">
             </div>
           </div>
           <div class="card text-center">
-            <img src="assets/hollywood-night.jpg">
+            <img class="location-image" src="assets/hollywood-night.jpg">
             Night Time Hollywood
             <div>
               <input type="radio" name="location" value="hollywood">
             </div>
           </div>
           <div class="card text-center">
-            <img src="assets/traffic-morning.jpg">
+            <img class="location-image" src="assets/traffic-morning.jpg">
             Morning Traffic
             <div>
               <input type="radio" name="location" value="morning-traffic">
             </div>
           </div>
         </div>
-        <div class="row justify-content-md-center">
+        <div class="row justify-content-md-center mt-3">
           <div class="alert alert-secondary text-center" role="alert">
             Or choose your time, place or car:
             <hr>
             <div>
-              <button type="button" class="btn btn-primary">Starting at $1</button>
+              <a role="button" class="btn btn-primary" href="./">Starting at $1</a>
             </div>
             <hr>
             <div class="non-profits">
               For non-profits, community organizations or similar, please contact us directly about free advertising!
             </div>
           </div>
+        </div>
+      </div>
+      <div class="container-fluid index-background mt-4">
+        <div class="container text-info">
+          <h3 class="pt-2 title">Add Your Advertisement</h3>
+          <input type="file" name="ad-asset" accept="image/*">
+        </div>
+      </div>
+      <div class="container-fluid bg-info">
+        <div class="container">
+          How much to pay?
+        </div>
+      </div>
+      <div class="container-fluid">
+        <div class="container">
+          Pay Now / Login
         </div>
       </div>
     </form>
