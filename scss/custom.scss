@@ -35,6 +35,18 @@ body {
 }
 
 .index-background {
-  min-height: 20em;
+  height: 25em;
   background: url('./assets/index-green-bg.jpg');
+}
+
+.preview-holder {
+  height: 15em;
+}
+
+#image-upload {
+  display: none;
+}
+
+#preview-image {
+  height: 100%;
 }

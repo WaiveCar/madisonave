@@ -38,7 +38,7 @@
             </div>
           </div>
         </div>
-        <div class="row justify-content-md-center mt-3">
+        <div class="row justify-content-md-center mt-5">
           <div class="alert alert-secondary text-center" role="alert">
             Or choose your time, place or car:
             <hr>
@@ -52,18 +52,32 @@
           </div>
         </div>
       </div>
-      <div class="container-fluid index-background mt-4">
+      <div class="container-fluid index-background mt-5">
         <div class="container text-info">
-          <h3 class="pt-2 title">Add Your Advertisement</h3>
-          <input id="image-upload" type="file" name="ad-asset" accept="image/*">
-          <img id="preview-image" src="#" alt="">
+          <h3 class="pt-3 title">Add Your Advertisement</h3>
+          <div class="text-center">The recommended image size for our screens is 1920 X 756 Pixels</div>
+          <div class="row justify-content-md-center">
+            <div id="upload-holder" class="mt-5">
+              <label class="btn btn-info" for="image-upload">
+                Click To Upload
+              </label>
+              <input id="image-upload" class="form-control-file" type="file" name="ad-asset" accept="image/*">
+            </div>
+          </div>
+          <div class="row justify-content-md-center mt-4">
+            <div class="preview-holder">
+              <img id="preview-image" src="#" alt="">
+            </div>
+          </div>
           <script>
-            document.getElementById('image-upload').addEventListener('change', function() {
+            var uploadInput = document.getElementById('image-upload');
+            uploadInput.addEventListener('change', function() {
               var reader = new FileReader();
               reader.onload = function(e) {
                 document.getElementById('preview-image').src = e.target.result;
+                document.getElementById('upload-holder').style.display = 'none';
               }
-              reader.readAsDataURL(document.getElementById('image-upload').files[0]);
+              reader.readAsDataURL(uploadInput.files[0]);
             });
           </script>
         </div>
