@@ -60,7 +60,7 @@
           <div class="row justify-content-md-center">
             <div id="upload-holder" class="mt-5">
               <label class="btn btn-info" for="image-upload">
-                Click To Upload
+                Click to Upload
               </label>
               <input id="image-upload" class="form-control-file" type="file" name="ad-asset" accept="image/*">
             </div>
@@ -86,12 +86,15 @@
       <div class="container-fluid bg-info">
         <div class="container pt-4">
           <div class="row">
-            How much would you like to spend?
+            How much money would you like to spend?
             <div class="input-group">
-              <input type="number" id="desired-price" class="form-control mt-2 mb-2">
+              <input type="number" id="desired-price" class="form-control mt-2 mb-2 col-3 float-right">
             </div>
+            <button class="btn btn-primary" type="button" onclick="calculateOptions()">
+              Calculate Options
+            </button>
           </div>
-          <div class="card-group">
+          <div class="card-group mt-3" id="option-cards">
             <div class="card text-center">
               Option 1
               <div class="pb-2">
@@ -121,6 +124,11 @@
           enteredAmount.addEventListener('change', function(e) {
             console.log(e.target.value);
           });
+          var optionCards = document.getElementById('option-cards');
+          function calculateOptions() {
+            console.log('click');
+            optionCards.style.visibility = 'visible';
+          }
         </script>
       </div>
       <div class="container-fluid">
