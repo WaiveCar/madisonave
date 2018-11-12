@@ -20,28 +20,7 @@
       <div class="container">
         <h3 class="mt-4 mb-4 title">Where Would You Like to Advertise?</h3>
         <h4 class="text-primary title ml-3">Our Most Popular Times and Locations:</h4>
-        <div class="card-group mt-2">
-          <div class="card text-center">
-            <img class="location-image" src="assets/sm-day.jpg">
-            Daytime Santa Monica
-            <div class="pb-2">
-              <input type="radio" name="location" value="santa-monica">
-            </div>
-          </div>
-          <div class="card text-center">
-            <img class="location-image" src="assets/hollywood-night.jpg">
-            Night Time Hollywood
-            <div class="pb-2">
-              <input type="radio" name="location" value="hollywood">
-            </div>
-          </div>
-          <div class="card text-center">
-            <img class="location-image" src="assets/traffic-morning.jpg">
-            Morning Traffic
-            <div class="pb-2">
-              <input type="radio" name="location" value="morning-traffic">
-            </div>
-          </div>
+        <div class="card-group mt-2" id="popular-list">
         </div>
         <div class="row justify-content-md-center mt-5">
           <div class="alert alert-secondary text-center" role="alert">
@@ -74,17 +53,6 @@
               <img id="preview-image" src="#" alt="">
             </div>
           </div>
-          <script>
-            var uploadInput = document.getElementById('image-upload');
-            uploadInput.addEventListener('change', function() {
-              var reader = new FileReader();
-              reader.onload = function(e) {
-                document.getElementById('preview-image').src = e.target.result;
-                document.getElementById('upload-holder').style.display = 'none';
-              }
-              reader.readAsDataURL(uploadInput.files[0]);
-            });
-          </script>
         </div>
       </div>
       <div class="container-fluid bg-info">
@@ -120,6 +88,35 @@
           </div>
         </div>
         <script>
+          axios.get('/splash_resources')
+          .then(function(response) {
+            var parser = new DOMParser();
+            response.data.popularLocations.forEach(function(option){
+              var htmlString = parser.parseFromString('\
+                <div class="card text-center"> \
+                  <img class="location-image" src="assets/' + option.image + '"> \
+                  ' + option.name + '\
+                  <div class="pb-2">\
+                    <input type="radio" name="location" value="santa-monica"> \
+                  </div> \
+                </div>', 'text/html'
+              ).body.firstChild;
+              var parentNode = document.getElementById('popular-list');
+              parentNode.append(htmlString)
+            });
+          })
+          .catch(function(err) {
+            console.log('error: ', err);
+          });
+          var uploadInput = document.getElementById('image-upload');
+          uploadInput.addEventListener('change', function() {
+            var reader = new FileReader();
+            reader.onload = function(e) {
+              document.getElementById('preview-image').src = e.target.result;
+              document.getElementById('upload-holder').style.display = 'none';
+            }
+            reader.readAsDataURL(uploadInput.files[0]);
+          });
           document.addEventListener('keypress', function(e) {
             e.keyCode === 13 && e.preventDefault();
           });
