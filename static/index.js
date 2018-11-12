@@ -1,19 +1,26 @@
+var state = {};
+
 axios
   .get('/splash_resources')
   .then(function(response) {
     var parser = new DOMParser();
-    response.data.popularLocations.forEach(function(option) {
+    state.locationData = response.data;
+    response.data.popularLocations.forEach(function(option, index) {
       var htmlString = parser.parseFromString(
         '\
       <div class="card text-center"> \
         <img class="location-image" src="assets/' +
           option.image +
           '"> \
-        ' +
+        <label for="' +
+          index +
+          '">' +
           option.name +
-          '\
+          '</label>\
         <div class="pb-2">\
-          <input type="radio" name="location" value="santa-monica"> \
+          <input type="radio" name="popular-location" value="' +
+          option.name +
+          '"> \
         </div> \
       </div>',
         'text/html',
@@ -21,6 +28,7 @@ axios
       var parentNode = document.getElementById('popular-list');
       parentNode.append(htmlString);
     });
+    console.log('state: ', state);
   })
   .catch(function(err) {
     console.log('error: ', err);
@@ -48,4 +56,18 @@ enteredAmount.addEventListener('change', function(e) {
 var optionCards = document.getElementById('option-cards');
 function calculateOptions() {
   optionCards.style.visibility = 'visible';
+  getFormData();
+}
+
+function getFormData() {
+  let currentChecked = document.querySelector(
+    'input[name="popular-location"]:checked',
+  );
+  if (!currentChecked) {
+    alert('Please select a loction');
+    return;
+  }
+  console.log(currentChecked.value);
+  var formData = new FormData(document.querySelector('form'));
+  return formData;
 }
