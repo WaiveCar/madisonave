@@ -12,10 +12,6 @@
     <img class="logo" src="assets/logo-dark.png">
   </header>
   <body>
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
-    <script src="bootstrap.min.js"></script>
-    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <form>
       <div class="container">
         <h3 class="mt-4 mb-4 title">Where Would You Like to Advertise?</h3>
@@ -87,50 +83,6 @@
             </div>
           </div>
         </div>
-        <script>
-          axios.get('/splash_resources')
-          .then(function(response) {
-            var parser = new DOMParser();
-            response.data.popularLocations.forEach(function(option){
-              var htmlString = parser.parseFromString('\
-                <div class="card text-center"> \
-                  <img class="location-image" src="assets/' + option.image + '"> \
-                  ' + option.name + '\
-                  <div class="pb-2">\
-                    <input type="radio" name="location" value="santa-monica"> \
-                  </div> \
-                </div>', 'text/html'
-              ).body.firstChild;
-              var parentNode = document.getElementById('popular-list');
-              parentNode.append(htmlString)
-            });
-          })
-          .catch(function(err) {
-            console.log('error: ', err);
-          });
-          var uploadInput = document.getElementById('image-upload');
-          uploadInput.addEventListener('change', function() {
-            var reader = new FileReader();
-            reader.onload = function(e) {
-              document.getElementById('preview-image').src = e.target.result;
-              document.getElementById('upload-holder').style.display = 'none';
-            }
-            reader.readAsDataURL(uploadInput.files[0]);
-          });
-          document.addEventListener('keypress', function(e) {
-            e.keyCode === 13 && e.preventDefault();
-          });
-          //This will eventually need to get real amounts based demand, but for now will show something
-          var enteredAmount = document.getElementById('desired-price');
-          enteredAmount.addEventListener('change', function(e) {
-            console.log(e.target.value);
-          });
-          var optionCards = document.getElementById('option-cards');
-          function calculateOptions() {
-            console.log('click');
-            optionCards.style.visibility = 'visible';
-          }
-        </script>
       </div>
       <div class="container-fluid">
         <div class="container">
@@ -138,5 +90,52 @@
         </div>
       </div>
     </form>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="bootstrap.min.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script defer>
+      axios.get('/splash_resources')
+      .then(function(response) {
+        var parser = new DOMParser();
+        response.data.popularLocations.forEach(function(option){
+          var htmlString = parser.parseFromString('\
+            <div class="card text-center"> \
+              <img class="location-image" src="assets/' + option.image + '"> \
+              ' + option.name + '\
+              <div class="pb-2">\
+                <input type="radio" name="location" value="santa-monica"> \
+              </div> \
+            </div>', 'text/html'
+          ).body.firstChild;
+          var parentNode = document.getElementById('popular-list');
+          parentNode.append(htmlString)
+        });
+      })
+      .catch(function(err) {
+        console.log('error: ', err);
+      });
+      var uploadInput = document.getElementById('image-upload');
+      uploadInput.addEventListener('change', function() {
+        var reader = new FileReader();
+        reader.onload = function(e) {
+          document.getElementById('preview-image').src = e.target.result;
+          document.getElementById('upload-holder').style.display = 'none';
+        }
+        reader.readAsDataURL(uploadInput.files[0]);
+      });
+      document.addEventListener('keypress', function(e) {
+        e.keyCode === 13 && e.preventDefault();
+      });
+      //This will eventually need to get real amounts based demand, but for now will show something
+      var enteredAmount = document.getElementById('desired-price');
+      enteredAmount.addEventListener('change', function(e) {
+        console.log(e.target.value);
+      });
+      var optionCards = document.getElementById('option-cards');
+      function calculateOptions() {
+        optionCards.style.visibility = 'visible';
+      }
+    </script>
   </body>
 </html>
