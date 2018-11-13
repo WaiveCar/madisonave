@@ -1,16 +1,16 @@
-var state = {};
-var parser = new DOMParser();
+let state = {};
+let parser = new DOMParser();
 
 axios
   .get('/splash_resources')
-  .then(function(response) {
+  .then(response => {
     state.locationData = response.data;
     state.allLocations = response.data.popularLocations.concat(
       response.data.cheapLocations,
     );
-    var parentNode = document.getElementById('popular-list');
-    response.data.popularLocations.forEach(function(option, index) {
-      var html = parser.parseFromString(
+    let parentNode = document.getElementById('popular-list');
+    response.data.popularLocations.forEach((option, index) => {
+      let html = parser.parseFromString(
         '\
       <div class="card text-center"> \
         <img class="location-image" src="assets/' +
@@ -32,15 +32,15 @@ axios
       parentNode.append(html);
     });
   })
-  .catch(function(err) {
+  .catch(err => {
     console.log('error: ', err);
   });
 
-var uploadInput = document.getElementById('image-upload');
-uploadInput.addEventListener('change', function() {
-  var reader = new FileReader();
+let uploadInput = document.getElementById('image-upload');
+uploadInput.addEventListener('change', () => {
+  let reader = new FileReader();
   reader.onload = function(e) {
-    var previewImage = document.getElementById('preview-image')
+    let previewImage = document.getElementById('preview-image');
     previewImage.src = e.target.result;
     previewImage.style.visibility = 'visible';
     document.getElementById('upload-holder').style.display = 'none';
@@ -48,21 +48,21 @@ uploadInput.addEventListener('change', function() {
   reader.readAsDataURL(uploadInput.files[0]);
 });
 
-document.addEventListener('keypress', function(e) {
+document.addEventListener('keypress', e => {
   e.keyCode === 13 && e.preventDefault();
 });
 
-var enteredAmount = document.getElementById('desired-price');
+let enteredAmount = document.getElementById('desired-price');
 enteredAmount.addEventListener('change', function(e) {
   state.currentDesiredPrice = Number(e.target.value) * 100;
 });
 
 function getCarts(price, multiplier) {
   let carts = [];
-  console.log('price: ', price);
-  console.log('multiplier: ', multiplier);
-  let totalSeconds = price / 100 * 30 / multiplier;
-  console.log('totalSeconds: ', totalSeconds);
+  let pricePerSecond = (200 / 60) * multiplier; // $1 per 30 Seconds
+  console.log(pricePerSecond);
+  let totalSeconds = price / pricePerSecond;
+  console.log(totalSeconds);
   carts.push({
     days: 1,
     secondsPerDay: totalSeconds,
@@ -73,13 +73,13 @@ function getCarts(price, multiplier) {
   carts.push({
     days: 7,
     secondsPerDay: Math.floor(totalSeconds / 7),
-    pricePerDay: (price / 7).toFixed(2),
+    pricePerDay: price / 7,
     option: [],
     price: price,
   });
   carts.push({
     days: 30,
-    pricePerDay: (price / 30).toFixed(2),
+    pricePerDay: price / 30,
     secondsPerDay: Math.floor(totalSeconds / 30),
     option: [],
     price: price,
@@ -88,7 +88,7 @@ function getCarts(price, multiplier) {
 }
 
 function calculateOptions() {
-  var currentChecked = document.querySelector(
+  let currentChecked = document.querySelector(
     'input[name="popular-location"]:checked',
   );
   if (!currentChecked) {
@@ -99,33 +99,37 @@ function calculateOptions() {
     alert('Please select a price');
     return;
   }
-  var optionCards = document.getElementById('option-cards');
+  let optionCards = document.getElementById('option-cards');
   while (optionCards.firstChild) {
     optionCards.removeChild(optionCards.firstChild);
   }
-  let currentMultiplier = state.allLocations.find(function(item) {
+  let currentMultiplier = state.allLocations.find(item => {
     return item.name === currentChecked.value;
   }).multiplier;
   state.currentCarts = getCarts(state.currentDesiredPrice, currentMultiplier);
-  state.currentCarts.forEach(function(option, index) {
-    var html = parser.parseFromString(
+  state.currentCarts.forEach((option, index) => {
+    let html = parser.parseFromString(
       '\
-      <div class="card text-center"> \
+      <div class="card text-center mt-2"> \
         <label for="' +
         index +
         '"> Option ' +
         (index + 1) +
-        ' <div> \
+        ' <div class="mt-2"> \
       ' +
         option.days +
         (option.days > 1 ? ' Days' : ' Day') +
         ' \
       </div>\
-      <div> \
-      ' + (option.secondsPerDay / 60).toFixed(2) + ' Minutes A Day\
+      <div class="mt-2"> \
+      ' +
+        (option.secondsPerDay / 60).toFixed(2) +
+        ' Minutes A Day\
       </div> \
-      <div> \
-      $' + (option.pricePerDay / 100).toFixed(2) + ' Dollars Per Day\
+      <div class="mt-2"> \
+      $' +
+        (option.pricePerDay / 100).toFixed(2) +
+        ' Dollars Per Day\
       </div> \
       </label>\
         <div class="pb-2"> \
