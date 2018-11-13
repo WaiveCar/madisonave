@@ -45,11 +45,12 @@ uploadInput.addEventListener('change', () => {
 document.addEventListener('keypress', e => {
   e.keyCode === 13 && e.preventDefault();
 });
-
+/*
 let enteredAmount = document.getElementById('desired-price');
 enteredAmount.addEventListener('change', e => {
   state.currentDesiredPrice = Number(e.target.value) * 100;
 });
+*/
 
 function getCarts(price, multiplier) {
   let carts = [];
@@ -79,25 +80,22 @@ function getCarts(price, multiplier) {
   return carts;
 }
 
-function calculateOptions() {
+function calculateOptions(value) {
   let warningModal = document.getElementById('warning-modal');
   let warningModalText = document.getElementById('warning-modal-text');
   let currentChecked = document.querySelector(
     'input[name="popular-location"]:checked',
   );
+  let priceInput = document.getElementById('desired-price');
+  priceInput.value = value / 100;
   if (!currentChecked) {
     warningModalText.innerHTML = 'Please select a location';
     warningModal.style.display = 'block';
     return;
   }
-  let hasImage = uploadInput.files.length > 0; 
+  let hasImage = uploadInput.files.length > 0;
   if (!hasImage) {
     warningModalText.innerHTML = 'Please upload an image';
-    warningModal.style.display = 'block';
-    return;
-  }
-  if (!state.currentDesiredPrice) {
-    warningModalText.innerHTML = 'Please enter a price';
     warningModal.style.display = 'block';
     return;
   }
@@ -105,10 +103,15 @@ function calculateOptions() {
   while (optionCards.firstChild) {
     optionCards.removeChild(optionCards.firstChild);
   }
+  if (!value) {
+    warningModalText.innerHTML = 'Please enter a price';
+    warningModal.style.display = 'block';
+    return;
+  }
   let currentMultiplier = state.allLocations.find(item => {
     return item.name === currentChecked.value;
   }).multiplier;
-  state.currentCarts = getCarts(state.currentDesiredPrice, currentMultiplier);
+  state.currentCarts = getCarts(value, currentMultiplier);
   state.currentCarts.forEach((option, index) => {
     let html = parser.parseFromString(
       `
