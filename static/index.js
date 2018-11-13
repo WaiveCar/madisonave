@@ -86,15 +86,16 @@ function getCarts(price, multiplier) {
 }
 
 function calculateOptions() {
+  let warningModal = document.getElementById('warning-modal');
   let currentChecked = document.querySelector(
     'input[name="popular-location"]:checked',
   );
   if (!currentChecked) {
-    alert('Please select a loction');
+    warningModal.style.display = 'block';
     return;
   }
   if (!state.currentDesiredPrice) {
-    alert('Please select a price');
+    warningModal.style.display = 'block';
     return;
   }
   let optionCards = document.getElementById('option-cards');
@@ -150,3 +151,7 @@ function calculateOptions() {
   });
 }
 
+function hideModal() {
+  let warningModal = document.getElementById('warning-modal');
+  warningModal.style.display = 'none';
+}
