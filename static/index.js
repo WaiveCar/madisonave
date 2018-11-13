@@ -39,7 +39,7 @@ axios
 let uploadInput = document.getElementById('image-upload');
 uploadInput.addEventListener('change', () => {
   let reader = new FileReader();
-  reader.onload = function(e) {
+  reader.onload = (e) => {
     let previewImage = document.getElementById('preview-image');
     previewImage.src = e.target.result;
     previewImage.style.visibility = 'visible';
@@ -53,16 +53,14 @@ document.addEventListener('keypress', e => {
 });
 
 let enteredAmount = document.getElementById('desired-price');
-enteredAmount.addEventListener('change', function(e) {
+enteredAmount.addEventListener('change', (e) => {
   state.currentDesiredPrice = Number(e.target.value) * 100;
 });
 
 function getCarts(price, multiplier) {
   let carts = [];
   let pricePerSecond = (200 / 60) * multiplier; // $1 per 30 Seconds
-  console.log(pricePerSecond);
   let totalSeconds = price / pricePerSecond;
-  console.log(totalSeconds);
   carts.push({
     days: 1,
     secondsPerDay: totalSeconds,
@@ -133,8 +131,8 @@ function calculateOptions() {
       </div> \
       </label>\
         <div class="pb-2"> \
-          <input type="radio" name="cart-options" value="option-' +
-        (index + 1) +
+          <input type="radio" name="cart-options" value="' +
+        (index) +
         '"> \
         </div> \
       </div> \
@@ -144,6 +142,11 @@ function calculateOptions() {
     optionCards.append(html);
   });
   optionCards.style.visibility = 'visible';
-  console.log(currentChecked.value);
-  console.log(state);
+  optionCards.addEventListener('change', () => {
+    let currentChecked = document.querySelector(
+      'input[name="cart-options"]:checked',
+    );
+    state.selectedCart = state.currentCarts[currentChecked.value];
+  });
 }
+
