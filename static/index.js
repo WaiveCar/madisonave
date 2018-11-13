@@ -55,6 +55,33 @@ enteredAmount.addEventListener('change', function(e) {
   state.currentDesiredPrice = Number(e.target.value) * 100;
 });
 
+function getCarts(price, multiplier) {
+  let carts = [];
+  console.log('price: ', price);
+  console.log('multiplier: ', multiplier);
+  let totalSeconds = price / 100 * 30 * multiplier;
+  console.log('totalSeconds: ', totalSeconds);
+  carts.push({
+    days: 1,
+    seconds: totalSeconds,
+    options: [],
+    price: price,
+  });
+  carts.push({
+    days: 7,
+    seconds: Math.floor(totalSeconds / 7),
+    option: [],
+    price: price,
+  });
+  carts.push({
+    days: 30,
+    seconds: Math.floor(totalSeconds / 30),
+    option: [],
+    price: price,
+  });
+  return carts;
+}
+
 function calculateOptions() {
   var currentChecked = document.querySelector(
     'input[name="popular-location"]:checked',
@@ -71,7 +98,11 @@ function calculateOptions() {
   while (optionCards.firstChild) {
     optionCards.removeChild(optionCards.firstChild);
   }
-  [1, 2, 3].forEach(function(option, index) {
+  let currentMultiplier = state.allLocations.find(function(item) {
+    return item.name === currentChecked.value;
+  }).multiplier;
+  state.currentCarts = getCarts(state.currentDesiredPrice, currentMultiplier);
+  state.currentCarts.forEach(function(option, index) {
     var html = parser.parseFromString(
       '\
       <div class="card text-center"> \
@@ -79,7 +110,16 @@ function calculateOptions() {
         index +
         '"> Option ' +
         (index + 1) +
-        '</label>\
+        ' <div> \
+      ' +
+        option.days +
+        (option.days > 1 ? ' Days' : ' Day') +
+        ' \
+      </div>\
+      <div> \
+      ' + (option.seconds / 60).toFixed(2) + ' Minutes A Day\
+      </div> \
+      </label>\
         <div class="pb-2"> \
           <input type="radio" name="cart-options" value="option-' +
         (index + 1) +
