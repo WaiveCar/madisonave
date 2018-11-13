@@ -11,22 +11,16 @@ axios
     let parentNode = document.getElementById('popular-list');
     response.data.popularLocations.forEach((option, index) => {
       let html = parser.parseFromString(
-        '\
-      <div class="card text-center"> \
-        <img class="location-image" src="assets/' +
-          option.image +
-          '"> \
-        <label for="' +
-          index +
-          '">' +
-          option.name +
-          '</label>\
-        <div class="pb-2">\
-          <input type="radio" name="popular-location" value="' +
-          option.name +
-          '"> \
-        </div> \
-      </div>',
+        `
+      <div class="card text-center">
+        <img class="location-image" src="assets/${option.image}">
+        <label for="${index}">
+          ${option.name}
+          </label>
+        <div class="pb-2">
+          <input type="radio" name="popular-location" value="${option.name}">
+        </div>
+      </div>`,
         'text/html',
       ).body.firstChild;
       parentNode.append(html);
@@ -39,7 +33,7 @@ axios
 let uploadInput = document.getElementById('image-upload');
 uploadInput.addEventListener('change', () => {
   let reader = new FileReader();
-  reader.onload = (e) => {
+  reader.onload = e => {
     let previewImage = document.getElementById('preview-image');
     previewImage.src = e.target.result;
     previewImage.style.visibility = 'visible';
@@ -53,13 +47,13 @@ document.addEventListener('keypress', e => {
 });
 
 let enteredAmount = document.getElementById('desired-price');
-enteredAmount.addEventListener('change', (e) => {
+enteredAmount.addEventListener('change', e => {
   state.currentDesiredPrice = Number(e.target.value) * 100;
 });
 
 function getCarts(price, multiplier) {
   let carts = [];
-  let pricePerSecond = (200 / 60) * multiplier; // $1 per 30 Seconds
+  let pricePerSecond = 200 / 60 * multiplier; // $1 per 30 Seconds
   let totalSeconds = price / pricePerSecond;
   carts.push({
     days: 1,
@@ -87,14 +81,23 @@ function getCarts(price, multiplier) {
 
 function calculateOptions() {
   let warningModal = document.getElementById('warning-modal');
+  let warningModalText = document.getElementById('warning-modal-text');
   let currentChecked = document.querySelector(
     'input[name="popular-location"]:checked',
   );
   if (!currentChecked) {
+    warningModalText.innerHTML = 'Please select a location';
+    warningModal.style.display = 'block';
+    return;
+  }
+  let hasImage = uploadInput.files.length > 0; 
+  if (!hasImage) {
+    warningModalText.innerHTML = 'Please upload an image';
     warningModal.style.display = 'block';
     return;
   }
   if (!state.currentDesiredPrice) {
+    warningModalText.innerHTML = 'Please enter a price';
     warningModal.style.display = 'block';
     return;
   }
@@ -108,36 +111,27 @@ function calculateOptions() {
   state.currentCarts = getCarts(state.currentDesiredPrice, currentMultiplier);
   state.currentCarts.forEach((option, index) => {
     let html = parser.parseFromString(
-      '\
-      <div class="card text-center mt-2"> \
-        <label for="' +
-        index +
-        '"> Option ' +
-        (index + 1) +
-        ' <div class="mt-2"> \
-      ' +
-        option.days +
-        (option.days > 1 ? ' Days' : ' Day') +
-        ' \
-      </div>\
-      <div class="mt-2"> \
-      ' +
-        (option.secondsPerDay / 60).toFixed(2) +
-        ' Minutes A Day\
-      </div> \
-      <div class="mt-2"> \
-      $' +
-        (option.pricePerDay / 100).toFixed(2) +
-        ' Dollars Per Day\
-      </div> \
-      </label>\
-        <div class="pb-2"> \
-          <input type="radio" name="cart-options" value="' +
-        (index) +
-        '"> \
-        </div> \
-      </div> \
-      ',
+      `
+      <div class="card text-center mt-2">
+         <label for="${index}"> Option
+         ${index + 1}
+         <div class="mt-2">
+         ${option.days}
+         ${option.days > 1 ? ' Days' : ' Day'}
+      </div>
+      <div class="mt-2">
+        ${(option.secondsPerDay / 60).toFixed(2)}
+        Minutes per day
+      </div>
+      <div class="mt-2">
+        $${(option.pricePerDay / 100).toFixed(2)} per day
+      </div>
+      </label>
+        <div class="pb-2">
+          <input type="radio" name="cart-options" value="${index}">
+        </div>
+      </div>
+      `,
       'text/html',
     ).body.firstChild;
     optionCards.append(html);
