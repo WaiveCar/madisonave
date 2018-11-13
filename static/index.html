@@ -16,7 +16,7 @@
       <div class="container">
         <h3 class="mt-4 mb-4 title">Where Would You Like to Advertise?</h3>
         <h4 class="text-primary title ml-3">Our Most Popular Times and Locations:</h4>
-        <div class="card-group mt-2" id="popular-list">
+        <div class="card-group mt-2" id="popular-list" />
         </div>
         <div class="row justify-content-md-center mt-5">
           <div class="alert alert-secondary text-center" role="alert">
@@ -53,35 +53,18 @@
       </div>
       <div class="container-fluid bg-info">
         <div class="container pt-4">
-          <div class="row">
-            How much money would you like to spend?
-            <div class="input-group">
-              <input type="number" id="desired-price" class="form-control mt-2 mb-2 col-3 float-right">
-            </div>
-            <button class="btn btn-primary" type="button" onclick="calculateOptions()">
-              Calculate Options
-            </button>
-          </div>
-          <div class="card-group mt-3" id="option-cards">
-            <div class="card text-center">
-              Option 1
-              <div class="pb-2">
-                <input type="radio" name="cart-options" value="option-1">
+          <div class="row justify-content-md-center">
+            <div class="col-4 text-center">
+              How much money would you like to spend?
+              <div class="input-group text-center">
+                <input type="number" id="desired-price" class="form-control mt-2 mb-2 col-6">
               </div>
-            </div>
-            <div class="card text-center">
-              Option 2
-              <div class="pb-2">
-                <input type="radio" name="cart-options" value="option-2">
-              </div>
-            </div>
-            <div class="card text-center">
-              Option 3
-              <div class="pb-2">
-                <input type="radio" name="cart-options" value="option-3">
-              </div>
+              <button class="text-center btn btn-primary" type="button" onclick="calculateOptions()">
+                Calculate Options
+              </button>
             </div>
           </div>
+          <div class="card-group mt-3" id="option-cards" />
         </div>
       </div>
       <div class="container-fluid">

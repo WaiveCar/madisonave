@@ -1,12 +1,16 @@
 var state = {};
+var parser = new DOMParser();
 
 axios
   .get('/splash_resources')
   .then(function(response) {
-    var parser = new DOMParser();
     state.locationData = response.data;
+    state.allLocations = response.data.popularLocations.concat(
+      response.data.cheapLocations,
+    );
+    var parentNode = document.getElementById('popular-list');
     response.data.popularLocations.forEach(function(option, index) {
-      var htmlString = parser.parseFromString(
+      var html = parser.parseFromString(
         '\
       <div class="card text-center"> \
         <img class="location-image" src="assets/' +
@@ -25,10 +29,8 @@ axios
       </div>',
         'text/html',
       ).body.firstChild;
-      var parentNode = document.getElementById('popular-list');
-      parentNode.append(htmlString);
+      parentNode.append(html);
     });
-    console.log('state: ', state);
   })
   .catch(function(err) {
     console.log('error: ', err);
@@ -47,27 +49,49 @@ uploadInput.addEventListener('change', function() {
 document.addEventListener('keypress', function(e) {
   e.keyCode === 13 && e.preventDefault();
 });
-//This will eventually need to get real amounts based demand, but for now will show something
+
 var enteredAmount = document.getElementById('desired-price');
 enteredAmount.addEventListener('change', function(e) {
-  console.log(e.target.value);
+  state.currentDesiredPrice = Number(e.target.value) * 100;
 });
 
-var optionCards = document.getElementById('option-cards');
 function calculateOptions() {
-  optionCards.style.visibility = 'visible';
-  getFormData();
-}
-
-function getFormData() {
-  let currentChecked = document.querySelector(
+  var currentChecked = document.querySelector(
     'input[name="popular-location"]:checked',
   );
   if (!currentChecked) {
     alert('Please select a loction');
     return;
   }
+  if (!state.currentDesiredPrice) {
+    alert('Please select a price');
+    return;
+  }
+  var optionCards = document.getElementById('option-cards');
+  while (optionCards.firstChild) {
+    optionCards.removeChild(optionCards.firstChild);
+  }
+  [1, 2, 3].forEach(function(option, index) {
+    var html = parser.parseFromString(
+      '\
+      <div class="card text-center"> \
+        <label for="' +
+        index +
+        '"> Option ' +
+        (index + 1) +
+        '</label>\
+        <div class="pb-2"> \
+          <input type="radio" name="cart-options" value="option-' +
+        (index + 1) +
+        '"> \
+        </div> \
+      </div> \
+      ',
+      'text/html',
+    ).body.firstChild;
+    optionCards.append(html);
+  });
+  optionCards.style.visibility = 'visible';
   console.log(currentChecked.value);
-  var formData = new FormData(document.querySelector('form'));
-  return formData;
+  console.log(state);
 }
