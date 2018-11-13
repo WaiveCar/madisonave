@@ -40,7 +40,9 @@ var uploadInput = document.getElementById('image-upload');
 uploadInput.addEventListener('change', function() {
   var reader = new FileReader();
   reader.onload = function(e) {
-    document.getElementById('preview-image').src = e.target.result;
+    var previewImage = document.getElementById('preview-image')
+    previewImage.src = e.target.result;
+    previewImage.style.visibility = 'visible';
     document.getElementById('upload-holder').style.display = 'none';
   };
   reader.readAsDataURL(uploadInput.files[0]);
@@ -59,23 +61,26 @@ function getCarts(price, multiplier) {
   let carts = [];
   console.log('price: ', price);
   console.log('multiplier: ', multiplier);
-  let totalSeconds = price / 100 * 30 * multiplier;
+  let totalSeconds = price / 100 * 30 / multiplier;
   console.log('totalSeconds: ', totalSeconds);
   carts.push({
     days: 1,
-    seconds: totalSeconds,
+    secondsPerDay: totalSeconds,
+    pricePerDay: price,
     options: [],
     price: price,
   });
   carts.push({
     days: 7,
-    seconds: Math.floor(totalSeconds / 7),
+    secondsPerDay: Math.floor(totalSeconds / 7),
+    pricePerDay: (price / 7).toFixed(2),
     option: [],
     price: price,
   });
   carts.push({
     days: 30,
-    seconds: Math.floor(totalSeconds / 30),
+    pricePerDay: (price / 30).toFixed(2),
+    secondsPerDay: Math.floor(totalSeconds / 30),
     option: [],
     price: price,
   });
@@ -117,7 +122,10 @@ function calculateOptions() {
         ' \
       </div>\
       <div> \
-      ' + (option.seconds / 60).toFixed(2) + ' Minutes A Day\
+      ' + (option.secondsPerDay / 60).toFixed(2) + ' Minutes A Day\
+      </div> \
+      <div> \
+      $' + (option.pricePerDay / 100).toFixed(2) + ' Dollars Per Day\
       </div> \
       </label>\
         <div class="pb-2"> \
