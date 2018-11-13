@@ -45,12 +45,6 @@ uploadInput.addEventListener('change', () => {
 document.addEventListener('keypress', e => {
   e.keyCode === 13 && e.preventDefault();
 });
-/*
-let enteredAmount = document.getElementById('desired-price');
-enteredAmount.addEventListener('change', e => {
-  state.currentDesiredPrice = Number(e.target.value) * 100;
-});
-*/
 
 function getCarts(price, multiplier) {
   let carts = [];
@@ -60,22 +54,26 @@ function getCarts(price, multiplier) {
     days: 1,
     secondsPerDay: totalSeconds,
     pricePerDay: price,
+    perMinutePerDay: pricePerSecond * 60,
     options: [],
-    price: price,
+    basePrice: price,
+    total: price,
   });
   carts.push({
     days: 7,
     secondsPerDay: Math.floor(totalSeconds / 7),
     pricePerDay: price / 7,
     option: [],
-    price: price,
+    basePrice: price,
+    total: price,
   });
   carts.push({
     days: 30,
     pricePerDay: price / 30,
     secondsPerDay: Math.floor(totalSeconds / 30),
     option: [],
-    price: price,
+    basePrice: price,
+    total: price,
   });
   return carts;
 }
@@ -116,21 +114,27 @@ function calculateOptions(value) {
     let html = parser.parseFromString(
       `
       <div class="card text-center mt-2">
-         <label for="${index}"> Option
-         ${index + 1}
-         <div class="mt-2">
-         ${option.days}
-         ${option.days > 1 ? ' Days' : ' Day'}
-      </div>
-      <div class="mt-2">
-        ${(option.secondsPerDay / 60).toFixed(2)}
-        Minutes per day
-      </div>
-      <div class="mt-2">
-        $${(option.pricePerDay / 100).toFixed(2)} per day
-      </div>
-      </label>
-        <div class="pb-2">
+        <div class="card-header">
+          <h5 class="card-title">
+           <label for="${index}"> Option
+              ${index + 1}
+            </label>
+          </h5>
+        </div>
+        <div class="card-body">
+          <div class="mt-2">
+            ${option.days}
+            ${option.days > 1 ? ' Days' : ' Day'}
+          </div>
+          <div class="mt-2">
+            ${(option.secondsPerDay / 60).toFixed(2)}
+            Minutes per day
+          </div>
+          <div class="mt-2">
+            $${(option.pricePerDay / 100).toFixed(2)} per day
+          </div>
+        </div>
+        <div class="card-footer pb-2">
           <input type="radio" name="cart-options" value="${index}">
         </div>
       </div>
@@ -145,6 +149,7 @@ function calculateOptions(value) {
       'input[name="cart-options"]:checked',
     );
     state.selectedCart = state.currentCarts[currentChecked.value];
+    console.log(state.selectedCart);
   });
 }
 
