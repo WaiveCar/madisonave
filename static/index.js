@@ -1,6 +1,9 @@
 let state = {};
 let parser = new DOMParser();
 
+document.addEventListener('keypress', e => {
+  e.keyCode === 13 && e.preventDefault();
+});
 axios
   .get('/splash_resources')
   .then(response => {
@@ -42,10 +45,6 @@ uploadInput.addEventListener('change', () => {
   reader.readAsDataURL(uploadInput.files[0]);
 });
 
-document.addEventListener('keypress', e => {
-  e.keyCode === 13 && e.preventDefault();
-});
-
 function getCarts(price, multiplier) {
   let carts = [];
   let pricePerSecond = 200 / 60 * multiplier; // $1 per 30 Seconds
@@ -64,7 +63,7 @@ function getCarts(price, multiplier) {
     days: 7,
     secondsPerDay: totalSeconds / 7,
     pricePerDay: price / 7,
-    perMinutePerDay: pricePerSecond * 60 / 7,
+    perMinutePerDay: pricePerSecond * 60,
     basePrice: price,
     addedDays: 0,
     addedMinutes: 0,
@@ -74,7 +73,7 @@ function getCarts(price, multiplier) {
     days: 30,
     pricePerDay: price / 30,
     secondsPerDay: totalSeconds / 30,
-    perMinutePerDay: pricePerSecond * 60 / 7,
+    perMinutePerDay: pricePerSecond * 60,
     basePrice: price,
     addedDays: 0,
     addedMinutes: 0,
@@ -156,6 +155,7 @@ function calculateOptions(value) {
     state.selectedCart = state.currentCarts[currentChecked.value];
     console.log(state.selectedCart);
     let addOns = document.getElementById('add-ons');
+    addOns.removeChild(addOns.firstChild)
     let html = parser.parseFromString(
       `
       <table class="table table-bordered table-hover">
@@ -172,7 +172,7 @@ function calculateOptions(value) {
             <td scope="row">Extra Minutes Per Day</td>
             <td>${(state.selectedCart.perMinutePerDay / 100).toFixed(2)}</td>
             <td>
-              <input type="number" id="day-quantity" class="form-control col-2" oninput="changeDays(this.value)">
+              <input class="col-2" type="number" min="0" oninput="changeOptions(this.value, 'addedMinutes')">
             </td>
             <td>${state.selectedCart.addedMinutes * (state.selectedCart.perMinutePerDay / 100).toFixed(2)}</td>
           </tr>
@@ -180,7 +180,7 @@ function calculateOptions(value) {
             <td scope="row">Extra Days</td>
             <td>${(state.selectedCart.pricePerDay / 100).toFixed(2)}</td>
             <td>
-              <input type="number" id="day-quantity" class="form-control col-2" oninput="changeDays(this.value)">
+              <input class="col-2" "type="number" min="0" id="day-quantity" oninput="changeOptions(this.value, 'addedDays')">
             </td>
             <td>${state.selectedCart.addedDays * (state.selectedCart.pricePerDay / 100).toFixed(2)}</td>
           </tr>
@@ -192,8 +192,9 @@ function calculateOptions(value) {
   });
 }
 
-function changeDays(count) {
-  console.log('count: ', count);
+function changeOptions(count, propToUpdate) {
+  state.selectedCart[propToUpdate] = Number(count);
+  console.log(state.selectedCart);
 }
 
 function hideModal() {
