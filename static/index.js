@@ -55,24 +55,29 @@ function getCarts(price, multiplier) {
     secondsPerDay: totalSeconds,
     pricePerDay: price,
     perMinutePerDay: pricePerSecond * 60,
-    options: [],
     basePrice: price,
+    addedDays: 0,
+    addedMinutes: 0,
     total: price,
   });
   carts.push({
     days: 7,
-    secondsPerDay: Math.floor(totalSeconds / 7),
+    secondsPerDay: totalSeconds / 7,
     pricePerDay: price / 7,
-    option: [],
+    perMinutePerDay: pricePerSecond * 60 / 7,
     basePrice: price,
+    addedDays: 0,
+    addedMinutes: 0,
     total: price,
   });
   carts.push({
     days: 30,
     pricePerDay: price / 30,
-    secondsPerDay: Math.floor(totalSeconds / 30),
-    option: [],
+    secondsPerDay: totalSeconds / 30,
+    perMinutePerDay: pricePerSecond * 60 / 7,
     basePrice: price,
+    addedDays: 0,
+    addedMinutes: 0,
     total: price,
   });
   return carts;
@@ -150,7 +155,45 @@ function calculateOptions(value) {
     );
     state.selectedCart = state.currentCarts[currentChecked.value];
     console.log(state.selectedCart);
+    let addOns = document.getElementById('add-ons');
+    let html = parser.parseFromString(
+      `
+      <table class="table table-bordered table-hover">
+        <thead>
+          <tr>
+            <th scope="col">Item</th>
+            <th scope="col">Price</th>
+            <th scope="col">Quantity</th>
+            <th scope="col">Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td scope="row">Extra Minutes Per Day</td>
+            <td>${(state.selectedCart.perMinutePerDay / 100).toFixed(2)}</td>
+            <td>
+              <input type="number" id="day-quantity" class="form-control col-2" oninput="changeDays(this.value)">
+            </td>
+            <td>${state.selectedCart.addedMinutes * (state.selectedCart.perMinutePerDay / 100).toFixed(2)}</td>
+          </tr>
+          <tr>
+            <td scope="row">Extra Days</td>
+            <td>${(state.selectedCart.pricePerDay / 100).toFixed(2)}</td>
+            <td>
+              <input type="number" id="day-quantity" class="form-control col-2" oninput="changeDays(this.value)">
+            </td>
+            <td>${state.selectedCart.addedDays * (state.selectedCart.pricePerDay / 100).toFixed(2)}</td>
+          </tr>
+        </tbody>
+      </table>`,
+      'text/html',
+    ).body.firstChild;
+    addOns.append(html);
   });
+}
+
+function changeDays(count) {
+  console.log('count: ', count);
 }
 
 function hideModal() {
