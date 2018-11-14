@@ -172,17 +172,17 @@ function calculateOptions(value) {
             <td scope="row">Extra Minutes Per Day</td>
             <td>${(state.selectedCart.perMinutePerDay / 100).toFixed(2)}</td>
             <td>
-              <input class="col-2" type="number" min="0" oninput="changeOptions(this.value, 'addedMinutes')">
+              <input class="col-2" "type="number" "min="0" id="min-quantity" oninput="changeOptions(this.value, 'addedMinutes', this.id)">
             </td>
-            <td>${state.selectedCart.addedMinutes * (state.selectedCart.perMinutePerDay / 100).toFixed(2)}</td>
+            <td id="min-quantity-total">$0.00</td>
           </tr>
           <tr>
             <td scope="row">Extra Days</td>
             <td>${(state.selectedCart.pricePerDay / 100).toFixed(2)}</td>
             <td>
-              <input class="col-2" "type="number" min="0" id="day-quantity" oninput="changeOptions(this.value, 'addedDays')">
+              <input class="col-2" "type="number" "min="0" id="day-quantity" oninput="changeOptions(this.value, 'addedDays', this.id)">
             </td>
-            <td>${state.selectedCart.addedDays * (state.selectedCart.pricePerDay / 100).toFixed(2)}</td>
+            <td id="day-quantity-total">$0.00</td>
           </tr>
         </tbody>
       </table>`,
@@ -192,8 +192,12 @@ function calculateOptions(value) {
   });
 }
 
-function changeOptions(count, propToUpdate) {
+function changeOptions(count, propToUpdate, id) {
   state.selectedCart[propToUpdate] = Number(count);
+  if (propToUpdate === 'addedMinutes') {
+    console.log('addedMinutes!');
+    document.getElementById(id + '-total').innerHTML = `$${(((state.selectedCart.addedMinutes * state.selectedCart.perMinutePerDay) * (state.selectedCart.days + state.selectedCart.addedDays)) / 100).toFixed(2)}`;
+  }
   console.log(state.selectedCart);
 }
 
