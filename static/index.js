@@ -131,11 +131,11 @@ function calculateOptions(value) {
             ${option.days > 1 ? ' Days' : ' Day'}
           </div>
           <div class="mt-2">
-            ${(option.secondsPerDay / 60).toFixed(2)}
-            Minutes per day
+            $${(option.pricePerDay / 100).toFixed(2)} per day
           </div>
           <div class="mt-2">
-            $${(option.pricePerDay / 100).toFixed(2)} per day
+            ${(option.secondsPerDay / 60).toFixed(2)}
+            Minutes per day
           </div>
         </div>
         <div class="card-footer pb-2">
@@ -153,7 +153,6 @@ function calculateOptions(value) {
       'input[name="cart-options"]:checked',
     );
     state.selectedCart = state.currentCarts[currentChecked.value];
-    console.log(state.selectedCart);
     let addOns = document.getElementById('add-ons');
     addOns.removeChild(addOns.firstChild);
     let html = parser.parseFromString(
@@ -169,54 +168,78 @@ function calculateOptions(value) {
         </thead>
         <tbody>
           <tr>
+            <td scope="row">Extra Days</td>
+            <td>${(state.selectedCart.pricePerDay / 100).toFixed(2)}</td>
+            <td>
+              <input class="col-2" "type="number" "min="0" id="day-quantity" oninput="updateCart(true, 'addedDays', this.value)">
+            </td>
+            <td id="day-quantity-total">$0.00</td>
+          </tr>
+          <tr>
             <td scope="row">Extra Minutes Per Day</td>
             <td>${(state.selectedCart.perMinutePerDay / 100).toFixed(2)}</td>
             <td>
-              <input class="col-2" "type="number" "min="0" id="min-quantity" oninput="changeOptions(this.value, 'addedMinutes')">
+              <input class="col-2" "type="number" "min="0" id="mins-quantity" oninput="updateCart(false, 'addedMinutes', this.value)">
             </td>
             <td id="mins-quantity-total">$0.00</td>
           </tr>
           <tr>
-            <td scope="row">Extra Days</td>
-            <td>${(state.selectedCart.pricePerDay / 100).toFixed(2)}</td>
             <td>
-              <input class="col-2" "type="number" "min="0" id="day-quantity" oninput="changeOptions(this.value, 'addedDays')">
+              Total minutes per day: <span id="minutes-per-day"/>
+            <td>
+              Total cost per day: <span id="cost-per-day"/>
             </td>
-            <td id="day-quantity-total">$0.00</td>
+            </td>
+            <td>
+              Total days: <span id="total-days"/>
+            </td>
+            <td>
+              Total cost: <span id="cost-with-options"/>
+            </td>
           </tr>
         </tbody>
       </table>`,
       'text/html',
     ).body.firstChild;
     addOns.append(html);
+    updateCart();
   });
 }
 
-function changeOptions(count, propToUpdate) {
-  state.selectedCart[propToUpdate] = Number(count);
-  let daysTotal, minsTotal;
-  if (propToUpdate === 'addedDays') {
-    daysTotal = (
-      state.selectedCart.addedDays * state.selectedCart.pricePerDay
-    ).toFixed(2);
-    minsTotal = (
-      state.selectedCart.addedMinutes *
-      state.selectedCart.perMinutePerDay *
-      (state.selectedCart.days + state.selectedCart.addedDays)
-    ).toFixed(2);
-  } else {
-    minsTotal = (
-      state.selectedCart.addedMinutes *
-      state.selectedCart.perMinutePerDay *
-      (state.selectedCart.days + state.selectedCart.addedDays)
-    ).toFixed(2);
-    daysTotal = (
-      state.selectedCart.addedDays * state.selectedCart.pricePerDay
-    ).toFixed(2);
+function updateCart(isAddedDays, propToUpdate, val) {
+  if (val) {
+    state.selectedCart[propToUpdate] = Number(val);
   }
-  document.getElementById('day-quantity-total').innerHTML = (daysTotal / 100).toFixed(2);
-  document.getElementById('mins-quantity-total').innerHTML = (minsTotal / 100).toFixed(2);
-  state.selectedCart.total = state.selectedCart.basePrice + daysTotal + minsTotal;
+  let daysTotal, minsTotal;
+  if (isAddedDays) {
+    daysTotal = state.selectedCart.addedDays * state.selectedCart.pricePerDay;
+    minsTotal =
+      state.selectedCart.addedMinutes *
+      state.selectedCart.perMinutePerDay *
+      (state.selectedCart.days + state.selectedCart.addedDays);
+  } else {
+    minsTotal =
+      state.selectedCart.addedMinutes *
+      state.selectedCart.perMinutePerDay *
+      (state.selectedCart.days + state.selectedCart.addedDays);
+    daysTotal = state.selectedCart.addedDays * state.selectedCart.pricePerDay;
+  }
+  document.getElementById('day-quantity-total').innerHTML = (
+    daysTotal / 100
+  ).toFixed(2);
+  document.getElementById('mins-quantity-total').innerHTML = (
+    minsTotal / 100
+  ).toFixed(2);
+  state.selectedCart.total =
+    Number(state.selectedCart.basePrice) + daysTotal + minsTotal;
+  document.getElementById('cost-with-options').innerHTML = `$${(
+    state.selectedCart.total / 100
+  ).toFixed(2)}`;
+  document.getElementById('total-days').innerHTML = `${state.selectedCart.days +
+    state.selectedCart.addedDays}`;
+  document.getElementById('day-quantity').value = state.selectedCart.addedDays;
+  document.getElementById('mins-quantity').value = state.selectedCart.addedMinutes;
+  document.getElementById('minutes-per-day').innerHTML = (state.selectedCart.addedMinutes + (state.selectedCart.secondsPerDay / 60)).toFixed(2);
 }
 
 function hideModal() {
