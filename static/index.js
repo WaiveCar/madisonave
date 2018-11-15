@@ -160,10 +160,10 @@ function calculateOptions(value) {
       <table class="table table-bordered table-hover">
         <thead>
           <tr>
-            <th scope="col">Item</th>
-            <th scope="col">Price</th>
-            <th scope="col">Quantity</th>
-            <th scope="col">Total</th>
+            <th scope="col" style="width: 20%">Item</th>
+            <th scope="col" style="width: 20%">Price</th>
+            <th scope="col" style="width: 20%">Quantity</th>
+            <th scope="col" style="width: 20%">Total</th>
           </tr>
         </thead>
         <tbody>
@@ -171,7 +171,7 @@ function calculateOptions(value) {
             <td scope="row">Extra Days</td>
             <td>${(state.selectedCart.pricePerDay / 100).toFixed(2)}</td>
             <td>
-              <input class="col-2" "type="number" "min="0" id="day-quantity" oninput="updateCart(true, 'addedDays', this.value)">
+              <input class="col-4" type="number" "min="0" id="day-quantity" oninput="updateCart(true, 'addedDays', this.value)">
             </td>
             <td id="day-quantity-total">$0.00</td>
           </tr>
@@ -179,7 +179,7 @@ function calculateOptions(value) {
             <td scope="row">Extra Minutes Per Day</td>
             <td>${(state.selectedCart.perMinutePerDay / 100).toFixed(2)}</td>
             <td>
-              <input class="col-2" "type="number" "min="0" id="mins-quantity" oninput="updateCart(false, 'addedMinutes', this.value)">
+              <input class="col-4" type="number" "min="0" id="mins-quantity" oninput="updateCart(false, 'addedMinutes', this.value)">
             </td>
             <td id="mins-quantity-total">$0.00</td>
           </tr>
