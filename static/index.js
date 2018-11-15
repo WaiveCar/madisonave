@@ -240,6 +240,7 @@ function updateCart(isAddedDays, propToUpdate, val) {
   document.getElementById('day-quantity').value = state.selectedCart.addedDays;
   document.getElementById('mins-quantity').value = state.selectedCart.addedMinutes;
   document.getElementById('minutes-per-day').innerHTML = (state.selectedCart.addedMinutes + (state.selectedCart.secondsPerDay / 60)).toFixed(2);
+  document.getElementById('cost-per-day').innerHTML = ((state.selectedCart.total / 100) / (state.selectedCart.days + state.selectedCart.addedDays)).toFixed(2);
 }
 
 function hideModal() {
