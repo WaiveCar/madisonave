@@ -147,6 +147,7 @@ function calculateOptions(value) {
     ).body.firstChild;
     optionCards.append(html);
   });
+  document.getElementById('options').style.display = 'block';
   optionCards.style.visibility = 'visible';
   optionCards.addEventListener('change', () => {
     let currentChecked = document.querySelector(

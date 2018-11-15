@@ -32,7 +32,7 @@ body {
 }
 
 .index-background {
-  height: 25em;
+  height: 23em;
   background: url('./assets/index-green-bg.jpg');
 }
 
@@ -48,6 +48,9 @@ body {
   height: 100%;
   visibility: hidden;
 }
+#options {
+  display: none;
+}
 
 #option-cards {
   visibility: hidden;
@@ -58,3 +61,6 @@ body {
   width: 2%;
 }
 
+.pricing-options {
+  min-height: 20em;
+}
