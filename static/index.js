@@ -155,7 +155,7 @@ function calculateOptions(value) {
     state.selectedCart = state.currentCarts[currentChecked.value];
     console.log(state.selectedCart);
     let addOns = document.getElementById('add-ons');
-    addOns.removeChild(addOns.firstChild)
+    addOns.removeChild(addOns.firstChild);
     let html = parser.parseFromString(
       `
       <table class="table table-bordered table-hover">
@@ -172,15 +172,15 @@ function calculateOptions(value) {
             <td scope="row">Extra Minutes Per Day</td>
             <td>${(state.selectedCart.perMinutePerDay / 100).toFixed(2)}</td>
             <td>
-              <input class="col-2" "type="number" "min="0" id="min-quantity" oninput="changeOptions(this.value, 'addedMinutes', this.id)">
+              <input class="col-2" "type="number" "min="0" id="min-quantity" oninput="changeOptions(this.value, 'addedMinutes')">
             </td>
-            <td id="min-quantity-total">$0.00</td>
+            <td id="mins-quantity-total">$0.00</td>
           </tr>
           <tr>
             <td scope="row">Extra Days</td>
             <td>${(state.selectedCart.pricePerDay / 100).toFixed(2)}</td>
             <td>
-              <input class="col-2" "type="number" "min="0" id="day-quantity" oninput="changeOptions(this.value, 'addedDays', this.id)">
+              <input class="col-2" "type="number" "min="0" id="day-quantity" oninput="changeOptions(this.value, 'addedDays')">
             </td>
             <td id="day-quantity-total">$0.00</td>
           </tr>
@@ -192,13 +192,31 @@ function calculateOptions(value) {
   });
 }
 
-function changeOptions(count, propToUpdate, id) {
+function changeOptions(count, propToUpdate) {
   state.selectedCart[propToUpdate] = Number(count);
-  if (propToUpdate === 'addedMinutes') {
-    console.log('addedMinutes!');
-    document.getElementById(id + '-total').innerHTML = `$${(((state.selectedCart.addedMinutes * state.selectedCart.perMinutePerDay) * (state.selectedCart.days + state.selectedCart.addedDays)) / 100).toFixed(2)}`;
+  let daysTotal, minsTotal;
+  if (propToUpdate === 'addedDays') {
+    daysTotal = (
+      state.selectedCart.addedDays * state.selectedCart.pricePerDay
+    ).toFixed(2);
+    minsTotal = (
+      state.selectedCart.addedMinutes *
+      state.selectedCart.perMinutePerDay *
+      (state.selectedCart.days + state.selectedCart.addedDays)
+    ).toFixed(2);
+  } else {
+    minsTotal = (
+      state.selectedCart.addedMinutes *
+      state.selectedCart.perMinutePerDay *
+      (state.selectedCart.days + state.selectedCart.addedDays)
+    ).toFixed(2);
+    daysTotal = (
+      state.selectedCart.addedDays * state.selectedCart.pricePerDay
+    ).toFixed(2);
   }
-  console.log(state.selectedCart);
+  document.getElementById('day-quantity-total').innerHTML = (daysTotal / 100).toFixed(2);
+  document.getElementById('mins-quantity-total').innerHTML = (minsTotal / 100).toFixed(2);
+  state.selectedCart.total = state.selectedCart.basePrice + daysTotal + minsTotal;
 }
 
 function hideModal() {
