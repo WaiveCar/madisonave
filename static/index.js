@@ -1,6 +1,14 @@
 let state = {};
 let parser = new DOMParser();
 
+function scrollDown() {
+  let scrollStart = window.pageYOffset;
+  window.scrollTo({
+    top: scrollStart + 500,
+    behavior: 'smooth',
+  });
+}
+
 document.addEventListener('keypress', e => {
   e.keyCode === 13 && e.preventDefault();
 });
@@ -41,6 +49,7 @@ uploadInput.addEventListener('change', () => {
     previewImage.src = e.target.result;
     previewImage.style.visibility = 'visible';
     document.getElementById('upload-holder').style.display = 'none';
+    scrollDown();
   };
   reader.readAsDataURL(uploadInput.files[0]);
 });
@@ -88,8 +97,6 @@ function calculateOptions(value) {
   let currentChecked = document.querySelector(
     'input[name="popular-location"]:checked',
   );
-  let priceInput = document.getElementById('desired-price');
-  priceInput.value = value / 100;
   if (!currentChecked) {
     warningModalText.innerHTML = 'Please select a location';
     warningModal.style.display = 'block';
@@ -108,8 +115,13 @@ function calculateOptions(value) {
   if (!value) {
     warningModalText.innerHTML = 'Please enter a price';
     warningModal.style.display = 'block';
+    document.getElementById('options').style.display = 'none';
     return;
   }
+  let priceInput = document.getElementById('desired-price');
+  priceInput.value = value / 100;
+  let addOns = document.getElementById('add-ons');
+  addOns.firstChild && addOns.removeChild(addOns.firstChild);
   let currentMultiplier = state.allLocations.find(item => {
     return item.name === currentChecked.value;
   }).multiplier;
@@ -155,7 +167,7 @@ function calculateOptions(value) {
     );
     state.selectedCart = state.currentCarts[currentChecked.value];
     let addOns = document.getElementById('add-ons');
-    addOns.removeChild(addOns.firstChild);
+    addOns.firstChild && addOns.removeChild(addOns.firstChild);
     let html = parser.parseFromString(
       `
       <table class="table table-bordered table-hover">
@@ -204,7 +216,10 @@ function calculateOptions(value) {
     ).body.firstChild;
     addOns.append(html);
     updateCart();
+    let scrollStart = window.pageYOffset;
+    scrollDown();
   });
+  scrollDown();
 }
 
 function updateCart(isAddedDays, propToUpdate, val) {
@@ -239,9 +254,17 @@ function updateCart(isAddedDays, propToUpdate, val) {
   document.getElementById('total-days').innerHTML = `${state.selectedCart.days +
     state.selectedCart.addedDays}`;
   document.getElementById('day-quantity').value = state.selectedCart.addedDays;
-  document.getElementById('mins-quantity').value = state.selectedCart.addedMinutes;
-  document.getElementById('minutes-per-day').innerHTML = (state.selectedCart.addedMinutes + (state.selectedCart.secondsPerDay / 60)).toFixed(2);
-  document.getElementById('cost-per-day').innerHTML = ((state.selectedCart.total / 100) / (state.selectedCart.days + state.selectedCart.addedDays)).toFixed(2);
+  document.getElementById('mins-quantity').value =
+    state.selectedCart.addedMinutes;
+  document.getElementById('minutes-per-day').innerHTML = (
+    state.selectedCart.addedMinutes +
+    state.selectedCart.secondsPerDay / 60
+  ).toFixed(2);
+  document.getElementById('cost-per-day').innerHTML = (
+    state.selectedCart.total /
+    100 /
+    (state.selectedCart.days + state.selectedCart.addedDays)
+  ).toFixed(2);
 }
 
 function hideModal() {
