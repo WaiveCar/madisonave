@@ -93,7 +93,7 @@ function getCarts(price, multiplier) {
     addedDays: 0,
     addedMinutes: 0,
     total: price,
-    color: 'primary',
+    color: 'secondary',
   });
   return carts;
 }
@@ -188,7 +188,7 @@ function calculateOptions(value) {
             <td scope="row">Extra Days</td>
             <td>${(state.selectedCart.pricePerDay / 100).toFixed(2)}</td>
             <td>
-              <input class="col-4" type="number" "min="0" id="day-quantity" oninput="updateCart(true, 'addedDays', this.value)">
+              <input type="number" "min="0" id="day-quantity" oninput="updateCart(true, 'addedDays', this.value)">
             </td>
             <td id="day-quantity-total">$0.00</td>
           </tr>
@@ -196,7 +196,7 @@ function calculateOptions(value) {
             <td scope="row">Extra Minutes Per Day</td>
             <td>${(state.selectedCart.perMinutePerDay / 100).toFixed(2)}</td>
             <td>
-              <input class="col-4" type="number" "min="0" id="mins-quantity" oninput="updateCart(false, 'addedMinutes', this.value)">
+              <input type="number" "min="0" id="mins-quantity" oninput="updateCart(false, 'addedMinutes', this.value)">
             </td>
             <td id="mins-quantity-total">$0.00</td>
           </tr>
