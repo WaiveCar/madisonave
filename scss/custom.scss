@@ -1,8 +1,9 @@
-$primary: #1dbb3e;
+$primary: #168f2f;
 $secondary: #dadada;
-$success: #606060;
+$success: #88F5DC;
 $info: #f9f9fa;
-$light: #eef9f9;
+$light: #109C7C;
+$warning: #9C3F7A;
 
 @import '../node_modules/bootstrap/scss/bootstrap';
 @import url('https://fonts.googleapis.com/css?family=Muli');
@@ -26,14 +27,12 @@ body {
   width: 100%;
 }
 
-
 .non-profits {
   font-size: 0.8em;
 }
 
 .index-background {
   height: 23em;
-  background: url('./assets/index-green-bg.jpg');
 }
 
 .preview-holder {

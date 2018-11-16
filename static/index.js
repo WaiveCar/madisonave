@@ -1,17 +1,6 @@
 let state = {};
 let parser = new DOMParser();
 
-function scrollDown() {
-  let scrollStart = window.pageYOffset;
-  window.scrollTo({
-    top: scrollStart + 500,
-    behavior: 'smooth',
-  });
-}
-
-document.addEventListener('keypress', e => {
-  e.keyCode === 13 && e.preventDefault();
-});
 axios
   .get('/splash_resources')
   .then(response => {
@@ -20,12 +9,14 @@ axios
       response.data.cheapLocations,
     );
     let parentNode = document.getElementById('popular-list');
-    response.data.popularLocations.forEach((option, index) => {
+    response.data.popularLocations.forEach((option, i) => {
       let html = parser.parseFromString(
         `
       <div class="card text-center">
-        <img class="location-image" src="assets/${option.image}">
-        <label for="${index}">
+        <img class="location-image" src="assets/${
+          option.image
+        }">
+        <label for="${i}">
           ${option.name}
           </label>
         <div class="pb-2">
@@ -40,6 +31,19 @@ axios
   .catch(err => {
     console.log('error: ', err);
   });
+
+function scrollDown() {
+  let scrollStart = window.pageYOffset;
+  window.scrollTo({
+    top: scrollStart + 500,
+    behavior: 'smooth',
+  });
+}
+
+document.getElementById('popular-list').addEventListener('change', e => {
+  console.log('radio changed');
+  scrollDown();
+});
 
 let uploadInput = document.getElementById('image-upload');
 uploadInput.addEventListener('change', () => {
@@ -67,6 +71,7 @@ function getCarts(price, multiplier) {
     addedDays: 0,
     addedMinutes: 0,
     total: price,
+    color: 'light',
   });
   carts.push({
     days: 7,
@@ -77,6 +82,7 @@ function getCarts(price, multiplier) {
     addedDays: 0,
     addedMinutes: 0,
     total: price,
+    color: 'warning',
   });
   carts.push({
     days: 30,
@@ -87,6 +93,7 @@ function getCarts(price, multiplier) {
     addedDays: 0,
     addedMinutes: 0,
     total: price,
+    color: 'primary',
   });
   return carts;
 }
@@ -129,19 +136,16 @@ function calculateOptions(value) {
   state.currentCarts.forEach((option, index) => {
     let html = parser.parseFromString(
       `
-      <div class="card text-center mt-2">
+      <div class="card text-center mt-2 bg-${option.color} text-info">
         <div class="card-header">
           <h5 class="card-title">
-           <label for="${index}"> Option
-              ${index + 1}
+           <label>
+              ${option.days}
+              ${option.days > 1 ? ' Days' : ' Day'}
             </label>
           </h5>
         </div>
         <div class="card-body">
-          <div class="mt-2">
-            ${option.days}
-            ${option.days > 1 ? ' Days' : ' Day'}
-          </div>
           <div class="mt-2">
             $${(option.pricePerDay / 100).toFixed(2)} per day
           </div>
