@@ -174,48 +174,53 @@ function calculateOptions(value) {
     addOns.firstChild && addOns.removeChild(addOns.firstChild);
     let html = parser.parseFromString(
       `
-      <table class="table table-bordered table-hover">
-        <thead>
-          <tr>
-            <th scope="col" style="width: 20%">Item</th>
-            <th scope="col" style="width: 20%">Price</th>
-            <th scope="col" style="width: 20%">Quantity</th>
-            <th scope="col" style="width: 20%">Total</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td scope="row">Extra Days</td>
-            <td>${(state.selectedCart.pricePerDay / 100).toFixed(2)}</td>
-            <td>
-              <input type="number" "min="0" id="day-quantity" oninput="updateCart(true, 'addedDays', this.value)">
-            </td>
-            <td id="day-quantity-total">$0.00</td>
-          </tr>
-          <tr>
-            <td scope="row">Extra Minutes Per Day</td>
-            <td>${(state.selectedCart.perMinutePerDay / 100).toFixed(2)}</td>
-            <td>
-              <input type="number" "min="0" id="mins-quantity" oninput="updateCart(false, 'addedMinutes', this.value)">
-            </td>
-            <td id="mins-quantity-total">$0.00</td>
-          </tr>
-          <tr>
-            <td>
-              Total minutes per day: <span id="minutes-per-day"/>
-            <td>
-              Total cost per day: <span id="cost-per-day"/>
-            </td>
-            </td>
-            <td>
-              Total days: <span id="total-days"/>
-            </td>
-            <td>
-              Total cost: <span id="cost-with-options"/>
-            </td>
-          </tr>
-        </tbody>
-      </table>`,
+      <div>
+        <table class="table table-bordered table-hover">
+          <thead>
+            <tr>
+              <th scope="col" style="width: 20%">Item</th>
+              <th scope="col" style="width: 20%">Price</th>
+              <th scope="col" style="width: 20%">Quantity</th>
+              <th scope="col" style="width: 20%">Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td scope="row">Extra Days</td>
+              <td>${(state.selectedCart.pricePerDay / 100).toFixed(2)}</td>
+              <td>
+                <input type="number" "min="0" id="day-quantity" oninput="updateCart(true, 'addedDays', this.value)">
+              </td>
+              <td id="day-quantity-total">$0.00</td>
+            </tr>
+            <tr>
+              <td scope="row">Extra Minutes Per Day</td>
+              <td>${(state.selectedCart.perMinutePerDay / 100).toFixed(2)}</td>
+              <td>
+                <input type="number" "min="0" id="mins-quantity" oninput="updateCart(false, 'addedMinutes', this.value)">
+              </td>
+              <td id="mins-quantity-total">$0.00</td>
+            </tr>
+            <tr>
+              <td>
+                Total minutes per day: <span id="minutes-per-day"/>
+              <td>
+                Total cost per day: <span id="cost-per-day"/>
+              </td>
+              </td>
+              <td>
+                Total days: <span id="total-days"/>
+              </td>
+              <td>
+                Total cost: <span id="cost-with-options"/>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="row justify-content-md-center mt-5">
+          <button class="btn btn-primary" type="button">Purchase Now!</button>
+        </div>
+      </div>`,
       'text/html',
     ).body.firstChild;
     addOns.append(html);
