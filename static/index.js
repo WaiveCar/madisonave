@@ -13,9 +13,7 @@ axios
       let html = parser.parseFromString(
         `
       <div class="card text-center">
-        <img class="location-image" src="assets/${
-          option.image
-        }">
+        <img class="location-image" src="assets/${option.image}">
         <label for="${i}">
           ${option.name}
           </label>
@@ -218,7 +216,7 @@ function calculateOptions(value) {
           </tbody>
         </table>
         <div class="row justify-content-md-center mt-5">
-          <button class="btn btn-primary" type="button">Purchase Now!</button>
+          <button class="btn btn-primary" type="button" onclick="submitCart()">Purchase Now!</button>
         </div>
       </div>`,
       'text/html',
@@ -279,4 +277,19 @@ function updateCart(isAddedDays, propToUpdate, val) {
 function hideModal() {
   let warningModal = document.getElementById('warning-modal');
   warningModal.style.display = 'none';
+}
+
+function submitCart() {
+  let formData = new FormData();
+  console.log(uploadInput.files[0]);
+  formData.append('file', uploadInput.files[0]);
+  formData.set('cart', JSON.stringify(state.selectedCart));
+  axios({
+    method: 'post',
+    url: '/purchase',
+    data: formData,
+    config: {headers: {'Content-Type': 'multipart/form-data'}},
+  })
+    .then(response => console.log('response: ', response))
+    .catch(err => console.log('err: ', err));
 }
