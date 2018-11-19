@@ -39,7 +39,6 @@ function scrollDown() {
 }
 
 document.getElementById('popular-list').addEventListener('change', e => {
-  console.log('radio changed');
   scrollDown();
 });
 
@@ -281,7 +280,6 @@ function hideModal() {
 
 function submitCart() {
   let formData = new FormData();
-  console.log(uploadInput.files[0]);
   formData.append('file', uploadInput.files[0]);
   formData.set('cart', JSON.stringify(state.selectedCart));
   axios({
@@ -290,6 +288,6 @@ function submitCart() {
     data: formData,
     config: {headers: {'Content-Type': 'multipart/form-data'}},
   })
-    .then(response => console.log('response: ', response))
+    .then(response => window.location = response.data.redirect)
     .catch(err => console.log('err: ', err));
 }
