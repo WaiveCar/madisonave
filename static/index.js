@@ -286,8 +286,11 @@ function submitCart() {
     method: 'post',
     url: '/purchase',
     data: formData,
-    config: {headers: {'Content-Type': 'multipart/form-data'}},
+    config: {headers: {'Content-Type': 'multipart/form-data', 'Access-Control-Allow-Origin': '*'}},
   })
-    .then(response => window.location = response.data.redirect)
+    .then(response => {
+      console.log('response: ', response);
+      //window.location = response.data.location
+    })
     .catch(err => console.log('err: ', err));
 }
