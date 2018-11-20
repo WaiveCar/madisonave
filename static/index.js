@@ -286,7 +286,11 @@ function submitCart() {
     method: 'post',
     url: '/purchase',
     data: formData,
-    config: {headers: {'Content-Type': 'multipart/form-data', 'Access-Control-Allow-Origin': '*'}},
+    config: {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    },
   })
     .then(response => {
       console.log('response: ', response);
