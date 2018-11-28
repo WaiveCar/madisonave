@@ -241,7 +241,7 @@ function calculateOptions(value) {
             payment: {
               transactions: [
                 {
-                  amount: {total: '0.01', currency: 'USD'},
+                  amount: {total: String((state.selectedCart.total / 100).toFixed(2)), currency: 'USD'},
                 },
               ],
             },
@@ -306,6 +306,7 @@ function updateCart(isAddedDays, propToUpdate, val) {
     100 /
     (state.selectedCart.days + state.selectedCart.addedDays)
   ).toFixed(2);
+  console.log(state.selectedCart);
 }
 
 function hideModal() {
