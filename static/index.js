@@ -215,13 +215,48 @@ function calculateOptions(value) {
           </tbody>
         </table>
         <div class="row justify-content-md-center mt-5">
-          <button class="btn btn-primary" type="button" onclick="submitCart()">Purchase Now!</button>
+          <div id="paypal-button-container"></div>
+          <!--<button class="btn btn-primary" type="button" onclick="submitCart()">Purchase Now!</button>-->
         </div>
       </div>`,
       'text/html',
     ).body.firstChild;
     addOns.append(html);
     updateCart();
+    paypal.Button.render(
+      {
+        env: 'sandbox', // sandbox | production
+        // Create a PayPal app: https://developer.paypal.com/developer/applications/create
+        client: {
+          sandbox:
+            'ARrHtZndH9dLcfMG3bzxFAAtY6fCZcJ7EZcPzdDZ9Zg5tPznHAN2TTEoQ0rL_ijpDPOdzvPhMnayZf4p',
+          production: '<insert production client id>',
+        },
+        // Show the buyer a 'Pay Now' button in the checkout flow
+        commit: true,
+        // payment() is called when the button is clicked
+        payment: function(data, actions) {
+          // Make a call to the REST api to create the payment
+          return actions.payment.create({
+            payment: {
+              transactions: [
+                {
+                  amount: {total: '0.01', currency: 'USD'},
+                },
+              ],
+            },
+          });
+        },
+        // onAuthorize() is called when the buyer approves the payment
+        onAuthorize: function(data, actions) {
+          // Make a call to the REST api to execute the payment
+          return actions.payment.execute().then(function() {
+            window.alert('Payment Complete!');
+          });
+        },
+      },
+      '#paypal-button-container',
+    );
     let scrollStart = window.pageYOffset;
     scrollDown();
   });
