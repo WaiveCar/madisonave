@@ -1,17 +1,24 @@
 let state = {};
 let parser = new DOMParser();
 
-axios
-  .get('/splash_resources')
-  .then(response => {
-    state.locationData = response.data;
-    state.allLocations = response.data.popularLocations.concat(
-      response.data.cheapLocations,
-    );
-    let parentNode = document.getElementById('popular-list');
-    response.data.popularLocations.forEach((option, i) => {
-      let html = parser.parseFromString(
-        `
+(function() {
+  let sessionId = sessionStorage.getItem('sessionId');
+  console.log('sessionId: ', sessionId);
+  axios
+    .get('/splash_resources', sessionId && {'Set-Cookie': `session=${sessionId}`})
+    .then(response => {
+      if (response.headers['session-id'] !== sessionId) {
+        sessionStorage.setItem('sessionId', response.headers['session-id'])
+      }
+      console.log(response);
+      state.locationData = response.data;
+      state.allLocations = response.data.popularLocations.concat(
+        response.data.cheapLocations,
+      );
+      let parentNode = document.getElementById('popular-list');
+      response.data.popularLocations.forEach((option, i) => {
+        let html = parser.parseFromString(
+          `
       <div class="card text-center">
         <img class="location-image" src="assets/${option.image}">
         <label for="${i}">
@@ -21,14 +28,15 @@ axios
           <input type="radio" name="popular-location" value="${option.name}">
         </div>
       </div>`,
-        'text/html',
-      ).body.firstChild;
-      parentNode.append(html);
+          'text/html',
+        ).body.firstChild;
+        parentNode.append(html);
+      });
+    })
+    .catch(err => {
+      console.log('error: ', err);
     });
-  })
-  .catch(err => {
-    console.log('error: ', err);
-  });
+})();
 
 function scrollDown() {
   let scrollStart = window.pageYOffset;
@@ -57,7 +65,7 @@ uploadInput.addEventListener('change', () => {
 
 function getCarts(price, multiplier) {
   let carts = [];
-  let pricePerSecond = 200 / 60 * multiplier; // $1 per 30 Seconds
+  let pricePerSecond = 200 / 60 * multiplier; // $1 per 30 Seconds as baseline
   let totalSeconds = price / pricePerSecond;
   carts.push({
     days: 1,
@@ -273,7 +281,7 @@ function calculateOptions(value) {
                   },
                 }).then(response => {
                   console.log('response');
-                  //                  window.location = response.data.location;
+                  //window.location = response.data.location;
                 });
               });
             })
@@ -338,4 +346,3 @@ function hideModal() {
   let warningModal = document.getElementById('warning-modal');
   warningModal.style.display = 'none';
 }
-
