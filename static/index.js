@@ -5,10 +5,10 @@ let parser = new DOMParser();
   let sessionId = sessionStorage.getItem('sessionId');
   console.log('sessionId: ', sessionId);
   axios
-    .get('/splash_resources', sessionId && {'Set-Cookie': `session=${sessionId}`})
+    .get('/splash_resources', sessionId && {headers: {'Session-Id': sessionId}})
     .then(response => {
       if (response.headers['session-id'] !== sessionId) {
-        sessionStorage.setItem('sessionId', response.headers['session-id'])
+        sessionStorage.setItem('sessionId', response.headers['session-id']);
       }
       console.log(response);
       state.locationData = response.data;
