@@ -257,9 +257,6 @@ function calculateOptions(value) {
             .execute()
             .then(function() {
               return actions.payment.get().then(function(order) {
-                console.log('cart: ', state.selectedCart);
-                console.log('data', data);
-                console.log('order: ', order.payer);
                 let formData = new FormData();
                 formData.append('file', uploadInput.files[0]);
                 formData.set('cart', JSON.stringify(state.selectedCart));
