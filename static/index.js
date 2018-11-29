@@ -241,7 +241,10 @@ function calculateOptions(value) {
             payment: {
               transactions: [
                 {
-                  amount: {total: String((state.selectedCart.total / 100).toFixed(2)), currency: 'USD'},
+                  amount: {
+                    total: String((state.selectedCart.total / 100).toFixed(2)),
+                    currency: 'USD',
+                  },
                 },
               ],
             },
@@ -250,9 +253,34 @@ function calculateOptions(value) {
         // onAuthorize() is called when the buyer approves the payment
         onAuthorize: function(data, actions) {
           // Make a call to the REST api to execute the payment
-          return actions.payment.execute().then(function() {
-            window.alert('Payment Complete!');
-          });
+          return actions.payment
+            .execute()
+            .then(function() {
+              return actions.payment.get().then(function(order) {
+                console.log('cart: ', state.selectedCart);
+                console.log('data', data);
+                console.log('order: ', order.payer);
+                let formData = new FormData();
+                formData.append('file', uploadInput.files[0]);
+                formData.set('cart', JSON.stringify(state.selectedCart));
+                formData.set('payer', order.payer);
+                formData.set('paymentInfo', data);
+                axios({
+                  method: 'post',
+                  url: '/purchase',
+                  data: formData,
+                  config: {
+                    headers: {
+                      'Content-Type': 'multipart/form-data',
+                    },
+                  },
+                }).then(response => {
+                  console.log('response');
+                  //                  window.location = response.data.location;
+                });
+              });
+            })
+            .catch(e => console.log('error in request: ', e));
         },
       },
       '#paypal-button-container',
@@ -314,23 +342,3 @@ function hideModal() {
   warningModal.style.display = 'none';
 }
 
-function submitCart() {
-  let formData = new FormData();
-  formData.append('file', uploadInput.files[0]);
-  formData.set('cart', JSON.stringify(state.selectedCart));
-  axios({
-    method: 'post',
-    url: '/purchase',
-    data: formData,
-    config: {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-    },
-  })
-    .then(response => {
-      console.log('response: ', response);
-      //window.location = response.data.location
-    })
-    .catch(err => console.log('err: ', err));
-}
