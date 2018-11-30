@@ -3,14 +3,12 @@ let parser = new DOMParser();
 
 (function() {
   let sessionId = sessionStorage.getItem('sessionId');
-  console.log('sessionId: ', sessionId);
   axios
     .get('/splash_resources', sessionId && {headers: {'Session-Id': sessionId}})
     .then(response => {
       if (response.headers['session-id'] !== sessionId) {
         sessionStorage.setItem('sessionId', response.headers['session-id']);
       }
-      console.log(response);
       state.locationData = response.data;
       state.allLocations = response.data.popularLocations.concat(
         response.data.cheapLocations,
@@ -138,6 +136,9 @@ function calculateOptions(value) {
     return item.name === currentChecked.value;
   }).multiplier;
   state.currentCarts = getCarts(value, currentMultiplier);
+  axios.get(`/deal?zone=1&price=${priceInput}&quoteId=${(sessionStorage.getItem('sessionId'))}`).then(response => {
+    console.log('response: ', response);
+  });
   state.currentCarts.forEach((option, index) => {
     let html = parser.parseFromString(
       `
