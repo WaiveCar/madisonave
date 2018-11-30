@@ -136,9 +136,15 @@ function calculateOptions(value) {
     return item.name === currentChecked.value;
   }).multiplier;
   state.currentCarts = getCarts(value, currentMultiplier);
-  axios.get(`/deal?zone=1&price=${priceInput}&quoteId=${(sessionStorage.getItem('sessionId'))}`).then(response => {
-    console.log('response: ', response);
-  });
+  axios
+    .get(
+      `/deal?zone=1&price=${priceInput.value}&quoteId=${sessionStorage.getItem(
+        'sessionId',
+      )}&splash=true`,
+    )
+    .then(response => {
+      console.log('response: ', response);
+    });
   state.currentCarts.forEach((option, index) => {
     let html = parser.parseFromString(
       `
