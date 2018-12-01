@@ -135,10 +135,13 @@ function calculateOptions(value) {
   let currentMultiplier = state.allLocations.find(item => {
     return item.name === currentChecked.value;
   }).multiplier;
+  let locationId = state.allLocations.find(item => {
+    return item.name === currentChecked.value;
+  }).id; 
   state.currentCarts = getCarts(value, currentMultiplier);
   axios
     .get(
-      `/deal?zone=1&price=${priceInput.value}&quoteId=${sessionStorage.getItem(
+      `/deal?zone=${locationId}&price=${priceInput.value}&quoteId=${sessionStorage.getItem(
         'sessionId',
       )}&splash=true`,
     )
@@ -346,7 +349,6 @@ function updateCart(isAddedDays, propToUpdate, val) {
     100 /
     (state.selectedCart.days + state.selectedCart.addedDays)
   ).toFixed(2);
-  console.log(state.selectedCart);
 }
 
 function hideModal() {
