@@ -137,20 +137,19 @@ function calculateOptions(value) {
   }).multiplier;
   let locationId = state.allLocations.find(item => {
     return item.name === currentChecked.value;
-  }).id; 
+  }).id;
   state.currentCarts = getCarts(value, currentMultiplier);
   axios
     .get(
-      `/deal?zone=${locationId}&price=${priceInput.value}&quoteId=${sessionStorage.getItem(
-        'sessionId',
-      )}&splash=true`,
+      `/deal?zone=${locationId}&price=${priceInput.value *
+        100}&quoteId=${sessionStorage.getItem('sessionId')}&splash=true`,
     )
     .then(response => {
       console.log('response: ', response);
-    });
-  state.currentCarts.forEach((option, index) => {
-    let html = parser.parseFromString(
-      `
+      state.currentCarts = response.data.quotes;
+      state.currentCarts.forEach((option, index) => {
+        let html = parser.parseFromString(
+          `
       <div class="card text-center mt-2 bg-${option.color} text-info">
         <div class="card-header">
           <h5 class="card-title">
@@ -174,21 +173,21 @@ function calculateOptions(value) {
         </div>
       </div>
       `,
-      'text/html',
-    ).body.firstChild;
-    optionCards.append(html);
-  });
-  document.getElementById('options').style.display = 'block';
-  optionCards.style.visibility = 'visible';
-  optionCards.addEventListener('change', () => {
-    let currentChecked = document.querySelector(
-      'input[name="cart-options"]:checked',
-    );
-    state.selectedCart = state.currentCarts[currentChecked.value];
-    let addOns = document.getElementById('add-ons');
-    addOns.firstChild && addOns.removeChild(addOns.firstChild);
-    let html = parser.parseFromString(
-      `
+          'text/html',
+        ).body.firstChild;
+        optionCards.append(html);
+      });
+      document.getElementById('options').style.display = 'block';
+      optionCards.style.visibility = 'visible';
+      optionCards.addEventListener('change', () => {
+        let currentChecked = document.querySelector(
+          'input[name="cart-options"]:checked',
+        );
+        state.selectedCart = state.currentCarts[currentChecked.value];
+        let addOns = document.getElementById('add-ons');
+        addOns.firstChild && addOns.removeChild(addOns.firstChild);
+        let html = parser.parseFromString(
+          `
       <div>
         <table class="table table-bordered table-hover">
           <thead>
@@ -237,73 +236,75 @@ function calculateOptions(value) {
           <!--<button class="btn btn-primary" type="button" onclick="submitCart()">Purchase Now!</button>-->
         </div>
       </div>`,
-      'text/html',
-    ).body.firstChild;
-    addOns.append(html);
-    updateCart();
-    paypal.Button.render(
-      {
-        env: 'sandbox', // sandbox | production
-        // Create a PayPal app: https://developer.paypal.com/developer/applications/create
-        client: {
-          sandbox:
-            'ARrHtZndH9dLcfMG3bzxFAAtY6fCZcJ7EZcPzdDZ9Zg5tPznHAN2TTEoQ0rL_ijpDPOdzvPhMnayZf4p',
-          production: '<insert production client id>',
-        },
-        // Show the buyer a 'Pay Now' button in the checkout flow
-        commit: true,
-        // payment() is called when the button is clicked
-        payment: function(data, actions) {
-          // Make a call to the REST api to create the payment
-          return actions.payment.create({
-            payment: {
-              transactions: [
-                {
-                  amount: {
-                    total: String((state.selectedCart.total / 100).toFixed(2)),
-                    currency: 'USD',
-                  },
-                },
-              ],
+          'text/html',
+        ).body.firstChild;
+        addOns.append(html);
+        updateCart();
+        paypal.Button.render(
+          {
+            env: 'sandbox', // sandbox | production
+            // Create a PayPal app: https://developer.paypal.com/developer/applications/create
+            client: {
+              sandbox:
+                'ARrHtZndH9dLcfMG3bzxFAAtY6fCZcJ7EZcPzdDZ9Zg5tPznHAN2TTEoQ0rL_ijpDPOdzvPhMnayZf4p',
+              production: '<insert production client id>',
             },
-          });
-        },
-        // onAuthorize() is called when the buyer approves the payment
-        onAuthorize: function(data, actions) {
-          // Make a call to the REST api to execute the payment
-          return actions.payment
-            .execute()
-            .then(function() {
-              return actions.payment.get().then(function(order) {
-                let formData = new FormData();
-                formData.append('file', uploadInput.files[0]);
-                formData.set('cart', JSON.stringify(state.selectedCart));
-                formData.set('payer', order.payer);
-                formData.set('paymentInfo', data);
-                axios({
-                  method: 'post',
-                  url: '/purchase',
-                  data: formData,
-                  config: {
-                    headers: {
-                      'Content-Type': 'multipart/form-data',
+            // Show the buyer a 'Pay Now' button in the checkout flow
+            commit: true,
+            // payment() is called when the button is clicked
+            payment: function(data, actions) {
+              // Make a call to the REST api to create the payment
+              return actions.payment.create({
+                payment: {
+                  transactions: [
+                    {
+                      amount: {
+                        total: String(
+                          (state.selectedCart.total / 100).toFixed(2),
+                        ),
+                        currency: 'USD',
+                      },
                     },
-                  },
-                }).then(response => {
-                  console.log('response');
-                  //window.location = response.data.location;
-                });
+                  ],
+                },
               });
-            })
-            .catch(e => console.log('error in request: ', e));
-        },
-      },
-      '#paypal-button-container',
-    );
-    let scrollStart = window.pageYOffset;
-    scrollDown();
-  });
-  scrollDown();
+            },
+            // onAuthorize() is called when the buyer approves the payment
+            onAuthorize: function(data, actions) {
+              // Make a call to the REST api to execute the payment
+              return actions.payment
+                .execute()
+                .then(function() {
+                  return actions.payment.get().then(function(order) {
+                    let formData = new FormData();
+                    formData.append('file', uploadInput.files[0]);
+                    formData.set('cart', JSON.stringify(state.selectedCart));
+                    formData.set('payer', order.payer);
+                    formData.set('paymentInfo', data);
+                    axios({
+                      method: 'post',
+                      url: '/purchase',
+                      data: formData,
+                      config: {
+                        headers: {
+                          'Content-Type': 'multipart/form-data',
+                        },
+                      },
+                    }).then(response => {
+                      //window.location = response.data.location;
+                    });
+                  });
+                })
+                .catch(e => console.log('error in request: ', e));
+            },
+          },
+          '#paypal-button-container',
+        );
+        let scrollStart = window.pageYOffset;
+        scrollDown();
+      });
+      scrollDown();
+    });
 }
 
 function updateCart(isAddedDays, propToUpdate, val) {
