@@ -253,6 +253,7 @@ function calculateOptions(value) {
             commit: true,
             // payment() is called when the button is clicked
             payment: function(data, actions) {
+        
               // Make a call to the REST api to create the payment
               return actions.payment.create({
                 payment: {
@@ -291,6 +292,7 @@ function calculateOptions(value) {
                         },
                       },
                     }).then(response => {
+                      console.log('response');
                       //window.location = response.data.location;
                     });
                   });
