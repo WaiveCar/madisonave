@@ -61,45 +61,6 @@ uploadInput.addEventListener('change', () => {
   reader.readAsDataURL(uploadInput.files[0]);
 });
 
-function getCarts(price, multiplier) {
-  let carts = [];
-  let pricePerSecond = 200 / 60 * multiplier; // $1 per 30 Seconds as baseline
-  let totalSeconds = price / pricePerSecond;
-  carts.push({
-    days: 1,
-    secondsPerDay: totalSeconds,
-    pricePerDay: price,
-    perMinutePerDay: pricePerSecond * 60,
-    basePrice: price,
-    addedDays: 0,
-    addedMinutes: 0,
-    total: price,
-    color: 'light',
-  });
-  carts.push({
-    days: 7,
-    secondsPerDay: totalSeconds / 7,
-    pricePerDay: price / 7,
-    perMinutePerDay: pricePerSecond * 60,
-    basePrice: price,
-    addedDays: 0,
-    addedMinutes: 0,
-    total: price,
-    color: 'warning',
-  });
-  carts.push({
-    days: 30,
-    pricePerDay: price / 30,
-    secondsPerDay: totalSeconds / 30,
-    perMinutePerDay: pricePerSecond * 60,
-    basePrice: price,
-    addedDays: 0,
-    addedMinutes: 0,
-    total: price,
-    color: 'secondary',
-  });
-  return carts;
-}
 
 function calculateOptions(value) {
   let warningModal = document.getElementById('warning-modal');
@@ -138,14 +99,12 @@ function calculateOptions(value) {
   let locationId = state.allLocations.find(item => {
     return item.name === currentChecked.value;
   }).id;
-  state.currentCarts = getCarts(value, currentMultiplier);
   axios
     .get(
       `/deal?zone=${locationId}&price=${priceInput.value *
         100}&quoteId=${sessionStorage.getItem('sessionId')}&splash=true`,
     )
     .then(response => {
-      console.log('response: ', response);
       state.currentCarts = response.data.quotes;
       state.currentCarts.forEach((option, index) => {
         let html = parser.parseFromString(
@@ -284,7 +243,7 @@ function calculateOptions(value) {
                     formData.set('paymentInfo', data);
                     axios({
                       method: 'post',
-                      url: '/purchase',
+                      url: '/capture',
                       data: formData,
                       config: {
                         headers: {
@@ -292,7 +251,7 @@ function calculateOptions(value) {
                         },
                       },
                     }).then(response => {
-                      console.log('response');
+                      console.log('response', response);
                       //window.location = response.data.location;
                     });
                   });
