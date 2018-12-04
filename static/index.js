@@ -238,9 +238,12 @@ function calculateOptions(value) {
                   return actions.payment.get().then(function(order) {
                     let formData = new FormData();
                     formData.append('file', uploadInput.files[0]);
-                    formData.set('cart', JSON.stringify(state.selectedCart));
-                    formData.set('payer', order.payer);
-                    formData.set('paymentInfo', data);
+                    formData.append('cart', JSON.stringify(state.selectedCart));
+                    formData.append('payer', JSON.stringify(order.payer));
+                    formData.append('paymentInfo', JSON.stringify(data));
+                    for (let pair of formData.entries()) {
+                      console.log('pair: ', pair);
+                    }
                     axios({
                       method: 'post',
                       url: '/capture',
