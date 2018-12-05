@@ -61,7 +61,6 @@ uploadInput.addEventListener('change', () => {
   reader.readAsDataURL(uploadInput.files[0]);
 });
 
-
 function calculateOptions(value) {
   let warningModal = document.getElementById('warning-modal');
   let warningModalText = document.getElementById('warning-modal-text');
@@ -213,10 +212,20 @@ function calculateOptions(value) {
             // payment() is called when the button is clicked
             payment: (data, actions) => {
               // Make a call to the REST api to create the payment
-              return axios.post('/capture', {
-                data: state.selectedCart,
-                quoteId: sessionStorage.getItem('sessionId'),
-              }).then((resp) => {
+              let formData = new FormData();
+              formData.append('file', uploadInput.files[0]);
+              formData.append('cart', JSON.stringify(state.selectedCart));
+              formData.append('quoteId', sessionStorage.getItem('sessionId'));
+              return axios({
+                method: 'post',
+                url: '/capture',
+                data: formData,
+                config: {
+                  headers: {
+                    'Content-Type': 'multipart/form-data',
+                  },
+                },
+              }).then(resp => {
                 return actions.payment.create({
                   payment: {
                     transactions: [
@@ -239,7 +248,7 @@ function calculateOptions(value) {
               return actions.payment
                 .execute()
                 .then(() => {
-                  return actions.payment.get().then((order) => {
+                  return actions.payment.get().then(order => {
                     let formData = new FormData();
                     formData.append('file', uploadInput.files[0]);
                     formData.append('cart', JSON.stringify(state.selectedCart));
@@ -248,15 +257,14 @@ function calculateOptions(value) {
                     axios({
                       method: 'put',
                       url: '/capture',
-                      data: formData,
-                      config: {
-                        headers: {
-                          'Content-Type': 'multipart/form-data',
-                        },
+                      data: {
+                        quoteId: sessionStorage.getItem('sessionId'),
+                        payer: JSON.stringify(order.payer),
+                        paymentInfo: JSON.stringify(data),
                       },
                     }).then(response => {
                       console.log('response', response);
-                      //window.location = response.data.location;
+                      window.location = response.data.location;
                     });
                   });
                 })
