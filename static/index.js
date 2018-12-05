@@ -211,41 +211,42 @@ function calculateOptions(value) {
             // Show the buyer a 'Pay Now' button in the checkout flow
             commit: true,
             // payment() is called when the button is clicked
-            payment: function(data, actions) {
-        
+            payment: (data, actions) => {
               // Make a call to the REST api to create the payment
-              return actions.payment.create({
-                payment: {
-                  transactions: [
-                    {
-                      amount: {
-                        total: String(
-                          (state.selectedCart.total / 100).toFixed(2),
-                        ),
-                        currency: 'USD',
+              return axios.post('/capture', {
+                data: state.selectedCart,
+                quoteId: sessionStorage.getItem('sessionId'),
+              }).then((resp) => {
+                return actions.payment.create({
+                  payment: {
+                    transactions: [
+                      {
+                        amount: {
+                          total: String(
+                            (state.selectedCart.total / 100).toFixed(2),
+                          ),
+                          currency: 'USD',
+                        },
                       },
-                    },
-                  ],
-                },
+                    ],
+                  },
+                });
               });
             },
             // onAuthorize() is called when the buyer approves the payment
-            onAuthorize: function(data, actions) {
+            onAuthorize: (data, actions) => {
               // Make a call to the REST api to execute the payment
               return actions.payment
                 .execute()
-                .then(function() {
-                  return actions.payment.get().then(function(order) {
+                .then(() => {
+                  return actions.payment.get().then((order) => {
                     let formData = new FormData();
                     formData.append('file', uploadInput.files[0]);
                     formData.append('cart', JSON.stringify(state.selectedCart));
                     formData.append('payer', JSON.stringify(order.payer));
                     formData.append('paymentInfo', JSON.stringify(data));
-                    for (let pair of formData.entries()) {
-                      console.log('pair: ', pair);
-                    }
                     axios({
-                      method: 'post',
+                      method: 'put',
                       url: '/capture',
                       data: formData,
                       config: {
