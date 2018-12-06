@@ -34,6 +34,17 @@ let parser = new DOMParser();
     .catch(err => {
       console.log('error: ', err);
     });
+
+  let options = document.getElementsByClassName('popular-option')
+  Array.prototype.forEach.call(options, (el) => {
+    el.addEventListener('click', () => {
+      calculateOptions(el.value);
+    });
+  });
+  let priceInput = document.getElementById('desired-price');
+  priceInput.addEventListener('input', () => {
+    calculateOptions(this.value * 100);
+  });
 })();
 
 function scrollDown() {
@@ -191,7 +202,6 @@ function calculateOptions(value) {
         </table>
         <div class="row justify-content-md-center mt-5">
           <div id="paypal-button-container"></div>
-          <!--<button class="btn btn-primary" type="button" onclick="submitCart()">Purchase Now!</button>-->
         </div>
       </div>`,
           'text/html',
