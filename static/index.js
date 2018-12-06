@@ -170,7 +170,7 @@ let parser = new DOMParser();
               <td scope="row">Extra Days</td>
               <td>${(state.selectedCart.pricePerDay / 100).toFixed(2)}</td>
               <td>
-                <input type="number" "min="0" id="day-quantity" oninput="updateCart(true, 'addedDays', this.value)">
+                <input type="number" "min="0" id="day-quantity">
               </td>
               <td id="day-quantity-total">$0.00</td>
             </tr>
@@ -178,7 +178,7 @@ let parser = new DOMParser();
               <td scope="row">Extra Minutes Per Day</td>
               <td>${(state.selectedCart.perMinutePerDay / 100).toFixed(2)}</td>
               <td>
-                <input type="number" "min="0" id="mins-quantity" oninput="updateCart(false, 'addedMinutes', this.value)">
+                <input type="number" "min="0" id="mins-quantity">
               </td>
               <td id="mins-quantity-total">$0.00</td>
             </tr>
@@ -205,6 +205,12 @@ let parser = new DOMParser();
             'text/html',
           ).body.firstChild;
           addOns.append(html);
+          document.getElementById('day-quantity').addEventListener('input', (e) => {
+            updateCart(true, 'addedDays', e.target.value);
+          });
+          document.getElementById('mins-quantity').addEventListener('input', (e) => {
+            updateCart(false, 'addedMinutes', e.target.value);
+          });
           updateCart();
           paypal.Button.render(
             {
