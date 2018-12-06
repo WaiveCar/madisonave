@@ -35,15 +35,15 @@ let parser = new DOMParser();
       console.log('error: ', err);
     });
 
-  let options = document.getElementsByClassName('popular-option')
-  Array.prototype.forEach.call(options, (el) => {
+  let options = document.getElementsByClassName('popular-option');
+  Array.prototype.forEach.call(options, el => {
     el.addEventListener('click', () => {
       calculateOptions(el.value);
     });
   });
   let priceInput = document.getElementById('desired-price');
-  priceInput.addEventListener('input', () => {
-    calculateOptions(this.value * 100);
+  priceInput.addEventListener('input', e => {
+    debounce(calculateOptions.bind(this, e.target.value * 100), 300)();
   });
 })();
 
@@ -53,6 +53,28 @@ function scrollDown() {
     top: scrollStart + 500,
     behavior: 'smooth',
   });
+}
+
+function debounce(func, wait, immediate) {
+  var timeout;
+
+  return function executedFunction() {
+    var context = this;
+    var args = arguments;
+
+    var later = function() {
+      timeout = null;
+      if (!immediate) func.apply(context, args);
+    };
+
+    var callNow = immediate && !timeout;
+
+    clearTimeout(timeout);
+
+    timeout = setTimeout(later, wait);
+
+    if (callNow) func.apply(context, args);
+  };
 }
 
 document.getElementById('popular-list').addEventListener('change', e => {
