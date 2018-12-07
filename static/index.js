@@ -1,7 +1,6 @@
-let state = {};
-let parser = new DOMParser();
-
 (function() {
+  let state = {};
+  let parser = new DOMParser();
   let sessionId = sessionStorage.getItem('sessionId');
   axios
     .get('/splash_resources', sessionId && {headers: {'Session-Id': sessionId}})
@@ -205,12 +204,16 @@ let parser = new DOMParser();
             'text/html',
           ).body.firstChild;
           addOns.append(html);
-          document.getElementById('day-quantity').addEventListener('input', (e) => {
-            updateCart(true, 'addedDays', e.target.value);
-          });
-          document.getElementById('mins-quantity').addEventListener('input', (e) => {
-            updateCart(false, 'addedMinutes', e.target.value);
-          });
+          document
+            .getElementById('day-quantity')
+            .addEventListener('input', e => {
+              updateCart(true, 'addedDays', e.target.value);
+            });
+          document
+            .getElementById('mins-quantity')
+            .addEventListener('input', e => {
+              updateCart(false, 'addedMinutes', e.target.value);
+            });
           updateCart();
           paypal.Button.render(
             {
