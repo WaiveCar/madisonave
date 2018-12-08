@@ -27,30 +27,30 @@
           <tbody>
             <tr>
               <td scope="row">Extra Days</td>
-              <td>${(cart.pricePerDay / 100).toFixed(2)}</td>
+              <td>$${(cart.pricePerDay / 100).toFixed(2)}</td>
               <td>
                 ${cart.addedDays}
               </td>
-              <td id="day-quantity-total">$${cart.addedDays * cart.pricePerDay}</td>
+              <td id="day-quantity-total">$${(cart.addedDays * cart.pricePerDay / 100).toFixed(2)}</td>
             </tr>
             <tr>
               <td scope="row">Extra Minutes Per Day</td>
-              <td>${(cart.perMinutePerDay / 100).toFixed(2)}</td>
+              <td>$${(cart.perMinutePerDay / 100).toFixed(2)}</td>
               <td>
                 ${cart.addedMinutes}
               </td>
-              <td id="mins-quantity-total">$${cart.addedMinutes *
+              <td id="mins-quantity-total">$${(cart.addedMinutes *
                 cart.perMinutePerDay *
-                (cart.days + cart.addedDays)}</td>
+                (cart.days + cart.addedDays) / 100).toFixed(2)}</td>
             </tr>
             <tr>
               <td>
-                Total minutes per day: ${cart.addedMinutes +
-                  cart.secondsPerDay / 60}
+                Total minutes per day: ${(cart.addedMinutes +
+                  cart.secondsPerDay / 60).toFixed(2)}
               <td>
-                Total cost per day: ${cart.total /
+                Total cost per day: $${(cart.total /
                   100 /
-                  (cart.days + cart.addedDays)}
+                  (cart.days + cart.addedDays)).toFixed(2)}
               </td>
               </td>
               <td>
