@@ -11,10 +11,13 @@
     )
     .then(result => {
       cart = result.data;
-      console.log('cart: ', cart);
+      console.log('cart: ', cart)
       let html = parser.parseFromString(
         `
       <div>
+        <div>
+          Thanks for purchasing advertising with Waive! A confrimation e-mail has been sent to ${cart.email}.
+        </div>
         <table class="table table-bordered table-hover">
           <thead>
             <tr>
