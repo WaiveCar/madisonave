@@ -14,8 +14,8 @@
       console.log('cart: ', cart)
       let html = parser.parseFromString(
         `
-      <div>
-        <div>
+      <div class="container">
+        <div class="text-center mb-3">
           Thanks for purchasing advertising with Waive! A confrimation e-mail has been sent to ${cart.email}.
         </div>
         <table class="table table-bordered table-hover">
@@ -65,6 +65,9 @@
             </tr>
           </tbody>
         </table>
+        <div class="text-center">
+          Your advertisement will run between ${cart.start} and ${cart.end}
+        </div>
       </div>`,
         'text/html' 
       ).body.firstChild;
