@@ -11,11 +11,10 @@
     )
     .then(result => {
       cart = result.data;
-      console.log('cart: ', cart)
       let html = parser.parseFromString(
         `
       <div class="container">
-        <div class="text-center mb-3">
+        <div class="text-center mt-5 mb-3">
           Thanks for purchasing advertising with Waive! A confrimation e-mail has been sent to ${cart.email}.
         </div>
         <table class="table table-bordered table-hover">
@@ -66,7 +65,7 @@
           </tbody>
         </table>
         <div class="text-center">
-          Your advertisement will run between ${cart.start} and ${cart.end}
+          Your advertisement will run between ${moment(cart.start).format('MM/DD/YYYY')} and ${moment(cart.end).format('MM/DD/YYYY')}
         </div>
       </div>`,
         'text/html' 
