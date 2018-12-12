@@ -222,6 +222,7 @@
               client: {
                 sandbox:
                   'ARrHtZndH9dLcfMG3bzxFAAtY6fCZcJ7EZcPzdDZ9Zg5tPznHAN2TTEoQ0rL_ijpDPOdzvPhMnayZf4p',
+                // A valid key will need to be added below for payment to work in production
                 production: '<insert production client id>',
               },
               // Show the buyer a 'Pay Now' button in the checkout flow
