@@ -78,9 +78,7 @@
           </tbody>
         </table>
         <div class="text-center">
-          Your advertisement will run between ${moment(cart.start).format(
-            'MM/DD/YYYY',
-          )} and ${moment(cart.end).format('MM/DD/YYYY')}
+          Your advertisement will run between ${cart.start} and ${cart.end}
         </div>
       </div>`,
         'text/html',
