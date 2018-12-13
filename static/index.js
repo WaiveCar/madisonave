@@ -1,18 +1,24 @@
 (function() {
+  // This 'state' is used to store anything that is needed within this scope
   let state = {};
   let parser = new DOMParser();
   let sessionId = sessionStorage.getItem('sessionId');
+  // This call to the api fetches the locations that are currently popular and sends the 
+  // sessionId/quoteId if there is one. The sessionId is not currently used here, but is 
+  // used by the server and could be used to reload previous inputs by the user. These previous 
+  // inputs are already cached by the server
   axios
     .get('/splash_resources', sessionId && {headers: {'Session-Id': sessionId}})
     .then(response => {
       if (response.headers['session-id'] !== sessionId) {
         sessionStorage.setItem('sessionId', response.headers['session-id']);
       }
-      state.locationData = response.data;
       state.allLocations = response.data.popularLocations.concat(
         response.data.cheapLocations,
       );
       let parentNode = document.getElementById('popular-list');
+      // The code below generates the html that gives the user options for different
+      // popular locations
       response.data.popularLocations.forEach((option, i) => {
         let html = parser.parseFromString(
           `
@@ -33,7 +39,8 @@
     .catch(err => {
       console.log('error: ', err);
     });
-
+  // This makes it so that if a location is selected, the page automatically scrolls
+  // to the next section
   document.getElementById('popular-list').addEventListener('change', e => {
     scrollDown();
   });
