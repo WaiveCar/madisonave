@@ -3,9 +3,9 @@
   let state = {};
   let parser = new DOMParser();
   let sessionId = sessionStorage.getItem('sessionId');
-  // This call to the api fetches the locations that are currently popular and sends the 
-  // sessionId/quoteId if there is one. The sessionId is not currently used here, but is 
-  // used by the server and could be used to reload previous inputs by the user. These previous 
+  // This call to the api fetches the locations that are currently popular and sends the
+  // sessionId/quoteId if there is one. The sessionId is not currently used here, but is
+  // used by the server and could be used to reload previous inputs by the user. These previous
   // inputs are already cached by the server
   axios
     .get('/splash_resources', sessionId && {headers: {'Session-Id': sessionId}})
@@ -52,6 +52,7 @@
     });
   });
 
+  // The event handler below handles the user uploading new files
   let uploadInput = document.getElementById('image-upload');
   uploadInput.addEventListener('change', () => {
     let reader = new FileReader();
@@ -75,7 +76,8 @@
   priceInput.addEventListener('input', e => {
     debounce(calculateOptions.bind(this, e.target.value * 100), 500)();
   });
-
+  // The function below gets a user's options based on their inputs and then adds elements
+  // displaying them to the page
   function calculateOptions(value) {
     let warningModal = document.getElementById('warning-modal');
     let warningModalText = document.getElementById('warning-modal-text');
@@ -94,6 +96,7 @@
       return;
     }
     let optionCards = document.getElementById('option-cards');
+    // If there are old options being displayed, they need to be removed before the new ones can be displayed
     while (optionCards.firstChild) {
       optionCards.removeChild(optionCards.firstChild);
     }
@@ -113,6 +116,9 @@
     let locationId = state.allLocations.find(item => {
       return item.name === currentChecked.value;
     }).id;
+    // This request fetches options from the server. Currently, static data is sent over
+    // but in the future, the server will be able to calculate different options based on
+    // usage, popularity of locations and other factors
     axios
       .get(
         `/deal?zone=${locationId}&price=${priceInput.value *
@@ -120,6 +126,7 @@
       )
       .then(response => {
         state.currentCarts = response.data.quotes;
+        // This renders the list of options
         state.currentCarts.forEach((option, index) => {
           let html = parser.parseFromString(
             `
@@ -152,6 +159,8 @@
         });
         document.getElementById('options').style.display = 'block';
         optionCards.style.visibility = 'visible';
+        // This event listener handles selecting of different carts and rendering of 
+        // the table for adding options
         optionCards.addEventListener('change', () => {
           let currentChecked = document.querySelector(
             'input[name="cart-options"]:checked',
@@ -228,6 +237,7 @@
               // Create a PayPal app: https://developer.paypal.com/developer/applications/create
               client: {
                 sandbox:
+                // Currently, this is a code for my personal paypal account and definiteyl will need to be changed
                   'ARrHtZndH9dLcfMG3bzxFAAtY6fCZcJ7EZcPzdDZ9Zg5tPznHAN2TTEoQ0rL_ijpDPOdzvPhMnayZf4p',
                 // A valid key will need to be added below for payment to work in production
                 production: '<insert production client id>',
@@ -236,7 +246,8 @@
               commit: true,
               // payment() is called when the button is clicked
               payment: (data, actions) => {
-                // Make a call to the REST api to create the payment
+                // Before the payment is processed by paypal, a user's purchase is sent to the server with 
+                // the information that has so far been obtained including the picture.
                 let formData = new FormData();
                 formData.append('file', uploadInput.files[0]);
                 formData.append('cart', JSON.stringify(state.selectedCart));
@@ -251,6 +262,7 @@
                     },
                   },
                 }).then(resp => {
+                  // Make a call to the REST api to create the payment
                   return actions.payment.create({
                     payment: {
                       transactions: [
@@ -270,10 +282,13 @@
               // onAuthorize() is called when the buyer approves the payment
               onAuthorize: (data, actions) => {
                 // Make a call to the REST api to execute the payment
+                // This happens when the payment to paypal is completed 
                 return actions.payment
                   .execute()
                   .then(() => {
                     return actions.payment.get().then(order => {
+                      // Once the payment is completed, the payment information is fetched and then sent to the server
+                      // so that it can be stored in the database for future use
                       let formData = new FormData();
                       formData.append('file', uploadInput.files[0]);
                       formData.append(
