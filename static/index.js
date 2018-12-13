@@ -306,7 +306,6 @@
                           paymentInfo: JSON.stringify(data),
                         },
                       }).then(response => {
-                        console.log('response', response);
                         window.location = response.data.location;
                       });
                     });
@@ -322,7 +321,11 @@
         scrollDown();
       });
   }
+
+  // This function updates the cart based on the additional days and minutes that the user has selected
   function updateCart(isAddedDays, propToUpdate, val) {
+    // The isAddedDays argument is a boolean that tells this function whether it is updating the 
+    // additional days or additional minutes option
     if (val) {
       state.selectedCart[propToUpdate] = Number(val);
     }
@@ -368,10 +371,15 @@
     ).toFixed(2);
   }
 
+  // This is a utility function that is only used for hiding the modal when the two different buttons 
+  // for closing the modal are clicked
   function hideModal() {
     let warningModal = document.getElementById('warning-modal');
     warningModal.style.display = 'none';
   }
+  
+  // This is a utility function that scrolls down. The expected behavior is that it scrolls to the 
+  // current bottom of the page from wherever it is called
   function scrollDown() {
     let scrollStart = window.pageYOffset;
     window.scrollTo({
@@ -379,7 +387,7 @@
       behavior: 'smooth',
     });
   }
-
+  // This utility function should be able to be used to debounce any api calls to reduce server load
   function debounce(func, wait, immediate) {
     let timeout;
     return function executedFunction() {
