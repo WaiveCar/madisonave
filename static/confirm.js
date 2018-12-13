@@ -2,6 +2,8 @@
   let parser = new DOMParser();
   let cart = null;
   let sessionId = sessionStorage.getItem('sessionId');
+  // This api call fetches the cart from the server by sessionId. If there is no session or no valid session,
+  // the user is redirected to the homepage. If there is one, a summary of what was ordered with it is rendered
   axios
     .get(
       '/prev_cart',
