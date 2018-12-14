@@ -237,7 +237,7 @@
               // Create a PayPal app: https://developer.paypal.com/developer/applications/create
               client: {
                 sandbox:
-                // Currently, this is a code for my personal paypal account and definiteyl will need to be changed
+                // Currently, this is a code for my personal paypal account and definitely will need to be changed
                   'ARrHtZndH9dLcfMG3bzxFAAtY6fCZcJ7EZcPzdDZ9Zg5tPznHAN2TTEoQ0rL_ijpDPOdzvPhMnayZf4p',
                 // A valid key will need to be added below for payment to work in production
                 production: '<insert production client id>',
