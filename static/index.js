@@ -42,9 +42,11 @@
     });
   // This makes it so that if a location is selected, the page automatically scrolls
   // to the next section
+  /*
   document.getElementById('popular-list').addEventListener('change', e => {
     scrollDown();
   });
+  */
 
   let modalClosers = document.getElementsByClassName('modal-close');
   Array.prototype.forEach.call(modalClosers, el => {
@@ -106,7 +108,7 @@
     if (!value) {
       warningModalText.innerHTML = 'Please enter a price';
       warningModal.style.display = 'block';
-      document.getElementById('options').style.display = 'none';
+//      document.getElementById('options').style.display = 'none';
       return;
     }
     let priceInput = document.getElementById('desired-price');
@@ -122,6 +124,7 @@
     // This request fetches options from the server. Currently, static data is sent over
     // but in the future, the server will be able to calculate different options based on
     // usage, popularity of locations and other factors
+    $("#empty-text").hide();
     axios
       .get(
         `/deal?zone=${locationId}&price=${priceInput.value *
