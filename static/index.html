@@ -57,20 +57,20 @@
 }
 .jumbotron h1 {
   font-weight: 900;
-  font-size: 3.25rem;
-  display: block;
+  font-size: 3rem;
+  text-shadow: 1px 1px 3px rgba(64,64,64,1);
 }
-.jumbotron h2 {
+.jumbotron h3 {
   text-transform: uppercase;
   margin-top: -.5rem;
-  margin-left: 0.5rem;
   text-shadow: 1px 1px 3px rgba(64,64,64,1);
 }
 .jumbotron p {
-  background:rgba(0,0,0,0.6);
+  background:rgba(32,32,48,0.8);
   display: inline-block;
   font-weight: 500;
   margin-top: 1rem;
+  margin-bottom: 0;
   margin-left: -.5rem;
   line-height: 2rem;
   padding: 1rem;
@@ -110,10 +110,9 @@
       <h1>
         WaiveScreen Advertising
       </h1>
-        <h2> Open to the public</h2>
+      <h3> Open to the public</h3>
       <p class="lead">
-        No Experts Needed.<br/>
-        Starting at <b>$0.00</b>!
+        Starting at <b>$0.00</b>
     </div>
     <form id="ad-signup" class="bg-info"> 
       <div class="container-fluid py-5">
@@ -148,13 +147,13 @@
             <div class="col-4">
               <div id="upload-holder" class="mt-5">
                 <label class="btn btn-info" for="image-upload">
-                  Click to Upload
+                  Upload Image
                 </label>
                 <input id="image-upload" class="form-control-file" type="file" name="ad-asset" accept="image/jpeg">
               </div>
             </div>
           </div>
-          <div>The recommended image size for our screens is 1920 X 756 Pixels</div>
+          <div>Best fit: 1920x756</div>
           <div class="row justify-content-md-center mt-4">
             <div class="preview-holder">
               <img id="preview-image" src="#" alt="">
