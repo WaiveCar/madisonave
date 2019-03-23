@@ -20,6 +20,7 @@
       // The code below generates the html that gives the user options for different
       // popular locations
       response.data.popularLocations.forEach((option, i) => {
+        let checked = (i == 0) ? 'checked' : '';
         let html = parser.parseFromString(
           `
       <div class="card text-center">
@@ -28,7 +29,7 @@
           ${option.name}
           </label>
         <div class="pb-2">
-          <input type="radio" name="popular-location" value="${option.name}">
+          <input type="radio" name="popular-location" ${checked} value="${option.name}">
         </div>
       </div>`,
           'text/html',
@@ -89,12 +90,14 @@
       warningModal.style.display = 'block';
       return;
     }
+    /*
     let hasImage = uploadInput.files.length > 0;
     if (!hasImage) {
       warningModalText.innerHTML = 'Please upload an image';
       warningModal.style.display = 'block';
       return;
     }
+    */
     let optionCards = document.getElementById('option-cards');
     // If there are old options being displayed, they need to be removed before the new ones can be displayed
     while (optionCards.firstChild) {
