@@ -41,6 +41,9 @@
   font-size: 3rem;
   color: #aaa;
 }
+#amount {
+  font-weight: 800;
+}
 </style>
   <body>
     <div class="modal" tabindex="-1" role="dialog" id="warning-modal">
@@ -145,7 +148,7 @@
     <div class="container-fluid bg-white pt-5 pb-5">
       <div class="container pt-5">
         <h1 class="pt-3 title">Product</h1>
-        <h3>Choose your preferred deal</h3>
+        <h3>Choose your preferred <span id='amount'></span> deal</h3>
         <div id="options">
           <h2 id="empty-text">Choose a Price and Place to see Available Products</h2>
           <div class="card-group" id="option-cards" />

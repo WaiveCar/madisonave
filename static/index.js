@@ -1,4 +1,7 @@
 (function() {
+  function price(amount) {
+    return '$' + (parseInt(amount, 10)/100).toFixed(2);
+  }
   // This 'state' is used to store anything that is needed within this scope
   let state = {};
   let parser = new DOMParser();
@@ -64,7 +67,7 @@
       previewImage.src = e.target.result;
       previewImage.style.visibility = 'visible';
       document.getElementById('upload-holder').style.display = 'none';
-      scrollDown();
+      //scrollDown();
     };
     reader.readAsDataURL(uploadInput.files[0]);
   });
@@ -76,8 +79,14 @@
     });
   });
   let priceInput = document.getElementById('desired-price');
+  let to;
   priceInput.addEventListener('input', e => {
-    debounce(calculateOptions.bind(this, e.target.value * 100), 500)();
+    if(to) {
+      clearTimeout(to);
+    }
+    to = setTimeout(function() {
+      calculateOptions(priceInput.value * 100);
+    }, 300);
   });
   // The function below gets a user's options based on their inputs and then adds elements
   // displaying them to the page
@@ -105,10 +114,14 @@
     while (optionCards.firstChild) {
       optionCards.removeChild(optionCards.firstChild);
     }
-    if (!value) {
+    if (isNaN(value)) {
+      /*
       warningModalText.innerHTML = 'Please enter a price';
       warningModal.style.display = 'block';
-//      document.getElementById('options').style.display = 'none';
+      document.getElementById('options').style.display = 'none';
+      */
+      $("#empty-text").show();
+      $("#amount").html("");
       return;
     }
     let priceInput = document.getElementById('desired-price');
@@ -131,6 +144,7 @@
           100}&quoteId=${sessionStorage.getItem('sessionId')}&splash=true`,
       )
       .then(response => {
+        $("#amount").html(price(response.data.amount));
         state.currentCarts = response.data.quotes;
         // This renders the list of options
         state.currentCarts.forEach((option, index) => {
@@ -163,7 +177,6 @@
           ).body.firstChild;
           optionCards.append(html);
         });
-        document.getElementById('options').style.display = 'block';
         optionCards.style.visibility = 'visible';
         // This event listener handles selecting of different carts and rendering of 
         // the table for adding options
@@ -322,9 +335,9 @@
             '#paypal-button-container',
           );
           let scrollStart = window.pageYOffset;
-          scrollDown();
+          //scrollDown();
         });
-        scrollDown();
+        //scrollDown();
       });
   }
 
@@ -386,27 +399,4 @@
   
   // This is a utility function that scrolls down. The expected behavior is that it scrolls to the 
   // current bottom of the page from wherever it is called
-  function scrollDown() {
-    let scrollStart = window.pageYOffset;
-    window.scrollTo({
-      top: scrollStart + 500,
-      behavior: 'smooth',
-    });
-  }
-  // This utility function should be able to be used to debounce any api calls to reduce server load
-  function debounce(func, wait, immediate) {
-    let timeout;
-    return function executedFunction() {
-      let context = this;
-      let args = arguments;
-      let later = function() {
-        timeout = null;
-        if (!immediate) func.apply(context, args);
-      };
-      let callNow = immediate && !timeout;
-      clearTimeout(timeout);
-      timeout = setTimeout(later, wait);
-      if (callNow) func.apply(context, args);
-    };
-  }
 })();
