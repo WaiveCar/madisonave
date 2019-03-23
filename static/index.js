@@ -1,3 +1,9 @@
+function selectLocation(what) {
+  $(what).siblings().removeClass('checked');
+  $(what).addClass('checked');
+  $("input", what).prop('checked', true);
+}
+
 (function() {
   function price(amount) {
     return '$' + (parseInt(amount, 10)/100).toFixed(2);
@@ -26,14 +32,10 @@
         let checked = (i == 0) ? 'checked' : '';
         let html = parser.parseFromString(
           `
-      <div class="card text-center">
+      <div onclick="selectLocation(this)" class="card text-center ${checked}">
         <img class="location-image" src="assets/${option.image}">
-        <label for="${i}">
-          ${option.name}
-          </label>
-        <div class="pb-2">
-          <input type="radio" name="popular-location" ${checked} value="${option.name}">
-        </div>
+        <label for="${option.name}">${option.label}</label>
+        <input type="radio" name="popular-location" ${checked} value="${option.name}">
       </div>`,
           'text/html',
         ).body.firstChild;
