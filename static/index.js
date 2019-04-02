@@ -92,18 +92,21 @@ function selectLocation(what) {
   });
   // The function below gets a user's options based on their inputs and then adds elements
   // displaying them to the page
+  setTimeout(function(){
+    calculateOptions(100 * 100);
+  });
   function calculateOptions(value) {
     let warningModal = document.getElementById('warning-modal');
     let warningModalText = document.getElementById('warning-modal-text');
     let currentChecked = document.querySelector(
       'input[name="popular-location"]:checked',
     );
+    /*
     if (!currentChecked) {
       warningModalText.innerHTML = 'Please select a location';
       warningModal.style.display = 'block';
       return;
     }
-    /*
     let hasImage = uploadInput.files.length > 0;
     if (!hasImage) {
       warningModalText.innerHTML = 'Please upload an image';
@@ -130,9 +133,11 @@ function selectLocation(what) {
     priceInput.value = value / 100;
     let addOns = document.getElementById('add-ons');
     addOns.firstChild && addOns.removeChild(addOns.firstChild);
+    /*
     let currentMultiplier = state.allLocations.find(item => {
       return item.name === currentChecked.value;
     }).multiplier;
+    */
     let locationId = state.allLocations.find(item => {
       return item.name === currentChecked.value;
     }).id;
@@ -171,6 +176,7 @@ function selectLocation(what) {
           </div>
         </div>
         <div class="card-footer pb-2">
+          <button type="button" class="btn btn-success">Buy</button>
           <input type="radio" name="cart-options" value="${index}">
         </div>
       </div>
