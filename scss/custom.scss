@@ -60,3 +60,6 @@ body {
 .pricing-options {
   min-height: 20em;
 }
+#amount, .pricing-options {
+  display: none;
+}
