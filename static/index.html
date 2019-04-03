@@ -158,7 +158,7 @@
       <p class="lead">
         Starting at <b>$1.00</b>
     </div>
-    <form id="ad-signup" class="bg-info"> 
+    <form id="ad-signup" class="bg-info" action=javascript:void> 
       <div class="container-fluid py-5">
         <div class="container">
           <h1 class="title">Place</h1>
@@ -239,22 +239,23 @@
         <div id="options">
           <!-- Ih3 id="empty-text">Choose a Price and Place to see Available Products</h3> -->
           <div class="card-group text-center" id="option-cards" />
-            <div onclick="selectLocation(this)" class="card pricing-option mt-2">
+            <div onclick="selectLocation(this)" data-price="100" class="card pricing-option mt-2">
               <div class="card-header">
                 <h2 class="card-title">Test Drive</h2>
                 <h5>Try it for <b>$1.00</b></h5>
               </div>
               <div class="card-body">
-                Plays <b>25</b> times.<br/>
+                Plays <b>25</b> times for 1 week!<br/>
               </div>
               <div class="card-footer text-center">
                 Just 4&#xA2; per play!<br/>
                 <div style=width:120px class='pennies'></div>
               </div>
+              <input type="radio" name="option" value="testdrive">
             </div>
-            <div onclick="selectLocation(this)" class="card pricing-option mt-2 checked">
+            <div onclick="selectLocation(this)" data-price="999" class="card pricing-option mt-2 checked">
               <div class="card-header text-center">
-                <h2 class="card-title"> Shoestring </h2>
+                <h2 class="card-title">Shoestring</h2>
                 <h5>Only <b>$9.99</b>/week</h5>
               </div>
               <div class="card-body">
@@ -264,10 +265,11 @@
                 Just 3&#8531;&#xA2; per play!<br/>
                 <div style=width:100px class='pennies'></div>
               </div>
+              <input type="radio" name="option" checked value="shoestring">
             </div>
-            <div onclick="selectLocation(this)" class="card pricing-option mt-2">
+            <div onclick="selectLocation(this)" data-price="2999" class="card pricing-option mt-2">
               <div class="card-header text-center">
-                <h2 class="card-title"> Standard </h2>
+                <h2 class="card-title">Standard</h2>
                 <h5><b>$29.99</b>/week</h5>
               </div>
               <div class="card-body">
@@ -278,6 +280,7 @@
                 Just 2&#190;&#xA2; per play!<br/>
                 <div style=width:85px class='pennies'></div>
               </div>
+              <input type="radio" name="option" value="standard">
             </div>
           </div>
         </div>
@@ -288,6 +291,7 @@
           <div class="col-md-4 col-sm-12 pay-container">
             <h4>Tap below to finish!</h4>
             <div id="paypal-button-container" class='py-4'></div>
+            <button onclick="window.fakebuy()" id="fakebuy">Fake Buy</button>
             <p>We'll use your PayPal email address to send you a confirmation and make you an account.</p>
           </div>
         </div>
