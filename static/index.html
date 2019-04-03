@@ -30,6 +30,12 @@
   margin-top: 0.5rem;
   opacity: 0.7;
 }
+.pay-container {
+  text-align: center;
+  padding: 0.75rem;
+  border-radius: 10px;
+  background: rgba(240,250,240,1);
+}
 #popular-list .card label {
   color: white;
   position: absolute;
@@ -278,9 +284,20 @@
         <div class="container-fluid bg-white py-5">
           <div id="add-ons" />
         </div>
+        <div class="row justify-content-md-center mt-4">
+          <div class="col-4 pay-container">
+            <h4>Tap below to finish!</h4>
+
+            <div id="paypal-button-container" class='py-4'></div>
+            <p>We'll use your PayPal email address to send you a confirmation and make you an account.</p>
+          </div>
+        </div>
       </div>
     </div>
     </form>
+    <center>
+      &copy;2019, Waive. <a href=mailto:support@waivecar.com>Contact</a>
+    </center>
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
     <script src="bootstrap.min.js"></script>
