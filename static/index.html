@@ -10,6 +10,7 @@
   </head>
   <style>
 .card {
+  cursor: pointer;
   position: relative;
   padding: 0.25rem;
   margin: 0 0.5rem;
@@ -21,7 +22,15 @@
 .card img {
   opacity: 0.75;
 }
-.card label {
+.pennies {
+  background: url('assets/penny_30.png');
+  height: 30px;
+  width: 180px;
+  display: inline-block;
+  margin-top: 0.5rem;
+  opacity: 0.7;
+}
+#popular-list .card label {
   color: white;
   position: absolute;
   top: 0;
@@ -34,6 +43,32 @@
   margin: 1rem 1rem 0 0;
   min-width: 65%;
   background:rgba(32,32,48,0.5);
+}
+#option-cards .card-title {
+  font-weight: 700;
+}
+#option-cards .checked .card-header,
+#option-cards .checked .card-footer
+{
+  background: rgba(172,240,172,0.5);
+}
+#option-cards .checked .card-body {
+  color: green;
+}
+#option-cards .card-body {
+  font-size: 1.25rem;
+  color: black;
+}
+.upload-text p {
+  line-height: 1.3rem;
+  background: rgba(255,255,255,0.2);
+  padding: 0.5rem 0.8rem;
+  border-radius: 10px;
+  display: inline-block;
+}
+.upload-text a {
+  color: rgba(210,210,255);
+  font-weight: 800;
 }
 .card input {
   display: none;
@@ -49,7 +84,6 @@
 .card.checked label {
   background:rgba(32,32,48,0.8);
 }
-
 .jumbotron {
   color: white;
   background-image: url("assets/carjumbo.png");
@@ -89,6 +123,7 @@
 #amount {
   font-weight: 800;
 }
+
 </style>
   <body>
     <div class="modal" tabindex="-1" role="dialog" id="warning-modal">
@@ -162,6 +197,15 @@
               <img id="preview-image" src="#" alt="">
             </div>
           </div>
+          <div class="row upload-text">
+            <div class="col-12">
+              <p>
+              Not a designer? Not a problem!<br/>
+              Try <a target="_blank" href="https://canva.com">Canva</a> or <a target="_blank" href="https://crello.com">Crello</a>: free easy-to-use tools for creating attractive designs.<br/> 
+              When done, download your design as a "PNG" to upload it here.
+              </p>
+            </div>
+          </div>
         </div>
       </div>
       
@@ -185,13 +229,51 @@
     <div class="container-fluid bg-white py-5">
       <div class="container">
         <h1 class="pt-4 title">Product</h1>
-        <h4>
-          Choose your preferred <span id='amount'></span> deal.<br/>
-          Ads run for 7 days starting from the time you buy.
-        </h4>
+        <h4>Choose what's right for you.</h4>
         <div id="options">
-          <h3 id="empty-text">Choose a Price and Place to see Available Products</h3>
-          <div class="card-group" id="option-cards" />
+          <!-- Ih3 id="empty-text">Choose a Price and Place to see Available Products</h3> -->
+          <div class="card-group text-center" id="option-cards" />
+            <div onclick="selectLocation(this)" class="card pricing-option mt-2">
+              <div class="card-header">
+                <h2 class="card-title">Test Drive</h2>
+                <h5>Try it for <b>$1.00</b></h5>
+              </div>
+              <div class="card-body">
+                Plays <b>25</b> times.<br/>
+              </div>
+              <div class="card-footer text-center">
+                Just 4&#xA2; per play!<br/>
+                <div style=width:120px class='pennies'></div>
+              </div>
+            </div>
+            <div onclick="selectLocation(this)" class="card pricing-option mt-2 checked">
+              <div class="card-header text-center">
+                <h2 class="card-title"> Shoestring </h2>
+                <h5>Only <b>$9.99</b>/week</h5>
+              </div>
+              <div class="card-body">
+                Plays <b>300</b> times each week!
+              </div>
+              <div class="card-footer text-center">
+                Just 3&#8531;&#xA2; per play!<br/>
+                <div style=width:100px class='pennies'></div>
+              </div>
+            </div>
+            <div onclick="selectLocation(this)" class="card pricing-option mt-2">
+              <div class="card-header text-center">
+                <h2 class="card-title"> Standard </h2>
+                <h5><b>$29.99</b>/week</h5>
+              </div>
+              <div class="card-body">
+                Plays <b>1,050</b> times each week!
+
+              </div>
+              <div class="card-footer text-center">
+                Just 2&#190;&#xA2; per play!<br/>
+                <div style=width:85px class='pennies'></div>
+              </div>
+            </div>
+          </div>
         </div>
         <div class="container-fluid bg-white py-5">
           <div id="add-ons" />

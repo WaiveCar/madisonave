@@ -102,49 +102,23 @@ function selectLocation(what) {
       'input[name="popular-location"]:checked',
     );
     /*
-    if (!currentChecked) {
-      warningModalText.innerHTML = 'Please select a location';
-      warningModal.style.display = 'block';
-      return;
-    }
-    let hasImage = uploadInput.files.length > 0;
-    if (!hasImage) {
-      warningModalText.innerHTML = 'Please upload an image';
-      warningModal.style.display = 'block';
-      return;
-    }
-    */
     let optionCards = document.getElementById('option-cards');
     // If there are old options being displayed, they need to be removed before the new ones can be displayed
     while (optionCards.firstChild) {
       optionCards.removeChild(optionCards.firstChild);
     }
-    if (isNaN(value)) {
-      /*
-      warningModalText.innerHTML = 'Please enter a price';
-      warningModal.style.display = 'block';
-      document.getElementById('options').style.display = 'none';
-      */
-      $("#empty-text").show();
-      $("#amount").html("");
-      return;
-    }
+    */
     let priceInput = document.getElementById('desired-price');
     priceInput.value = value / 100;
     let addOns = document.getElementById('add-ons');
     addOns.firstChild && addOns.removeChild(addOns.firstChild);
-    /*
-    let currentMultiplier = state.allLocations.find(item => {
-      return item.name === currentChecked.value;
-    }).multiplier;
-    */
     let locationId = state.allLocations.find(item => {
       return item.name === currentChecked.value;
     }).id;
     // This request fetches options from the server. Currently, static data is sent over
     // but in the future, the server will be able to calculate different options based on
     // usage, popularity of locations and other factors
-    $("#empty-text").hide();
+    //$("#empty-text").hide();
     axios
       .get(
         `/deal?zone=${locationId}&price=${priceInput.value *
@@ -154,30 +128,29 @@ function selectLocation(what) {
         $("#amount").html(price(response.data.amount));
         state.currentCarts = response.data.quotes;
         // This renders the list of options
+        /*
         state.currentCarts.forEach((option, index) => {
           let html = parser.parseFromString(
             `
-      <div class="card text-center mt-2 bg-${option.color} text-info">
-        <div class="card-header">
-          <h5 class="card-title">
-           <label>
-              ${option.days}
-              ${option.days > 1 ? ' Days' : ' Day'}
-            </label>
-          </h5>
+      <div class="card pricing-option mt-2">
+        <div class="card-header text-center">
+          <h4 class="card-title">
+            ${option.title}
+          </h4>
         </div>
         <div class="card-body">
-          <div class="mt-2">
+          <ul>
+          <li>
             $${(option.pricePerDay / 100).toFixed(2)} per day
-          </div>
-          <div class="mt-2">
+          </li>
+          <li>
             ${(option.secondsPerDay / 60).toFixed(2)}
             Minutes per day
-          </div>
+          </li>
+          </ul>
         </div>
-        <div class="card-footer pb-2">
-          <button type="button" class="btn btn-success">Buy</button>
-          <input type="radio" name="cart-options" value="${index}">
+        <div class="card-footer pb-2 text-center">
+          <button type="button" class="btn btn-secondary">${option.action}</button>
         </div>
       </div>
       `,
@@ -185,9 +158,11 @@ function selectLocation(what) {
           ).body.firstChild;
           optionCards.append(html);
         });
-        optionCards.style.visibility = 'visible';
+        */
+        //optionCards.style.visibility = 'visible';
         // This event listener handles selecting of different carts and rendering of 
         // the table for adding options
+        
         optionCards.addEventListener('change', () => {
           let currentChecked = document.querySelector(
             'input[name="cart-options"]:checked',

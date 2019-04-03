@@ -1,8 +1,6 @@
 $primary: #168f2f;
-$secondary: #4E9C10;
 $success: #1FA611;
 $info: #f9f9fa;
-$light: #11A65A;
 $warning: #109C7C;
 
 @import '../node_modules/bootstrap/scss/bootstrap';
@@ -31,13 +29,15 @@ body {
   font-size: 0.8em;
 }
 
+/*
 .index-background {
   height: 23em;
 }
 
+
 .preview-holder {
   height: 15em;
-}
+}*/
 
 #image-upload {
   display: none;
@@ -45,10 +45,6 @@ body {
 
 #preview-image {
   height: 100%;
-  visibility: hidden;
-}
-
-#option-cards {
   visibility: hidden;
 }
 
