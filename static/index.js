@@ -101,163 +101,100 @@ function selectLocation(what) {
     let currentChecked = document.querySelector(
       'input[name="popular-location"]:checked',
     );
-    /*
-    let optionCards = document.getElementById('option-cards');
-    // If there are old options being displayed, they need to be removed before the new ones can be displayed
-    while (optionCards.firstChild) {
-      optionCards.removeChild(optionCards.firstChild);
-    }
-    */
+
     let priceInput = document.getElementById('desired-price');
     priceInput.value = value / 100;
     let addOns = document.getElementById('add-ons');
-    let locationId = state.allLocations.find(item => {
-      return item.name === currentChecked.value;
-    }).id;
     // This request fetches options from the server. Currently, static data is sent over
     // but in the future, the server will be able to calculate different options based on
     // usage, popularity of locations and other factors
-    //$("#empty-text").hide();
-    axios
-      .get(
-        `/deal?zone=${locationId}&price=${priceInput.value *
-          100}&quoteId=${sessionStorage.getItem('sessionId')}&splash=true`,
-      )
-      .then(response => {
-        $("#amount").html(price(response.data.amount));
-        state.currentCarts = response.data.quotes;
-        // This renders the list of options
-        /*
-        state.currentCarts.forEach((option, index) => {
-          let html = parser.parseFromString(
-            `
-      <div class="card pricing-option mt-2">
-        <div class="card-header text-center">
-          <h4 class="card-title">
-            ${option.title}
-          </h4>
-        </div>
-        <div class="card-body">
-          <ul>
-          <li>
-            $${(option.pricePerDay / 100).toFixed(2)} per day
-          </li>
-          <li>
-            ${(option.secondsPerDay / 60).toFixed(2)}
-            Minutes per day
-          </li>
-          </ul>
-        </div>
-        <div class="card-footer pb-2 text-center">
-          <button type="button" class="btn btn-secondary">${option.action}</button>
-        </div>
-      </div>
-      `,
-            'text/html',
-          ).body.firstChild;
-          optionCards.append(html);
-        });
-        */
-        //optionCards.style.visibility = 'visible';
-        // This event listener handles selecting of different carts and rendering of 
-        // the table for adding options
-        
-        {
-          let currentChecked = document.querySelector(
-            'input[name="cart-options"]:checked',
-          );
-          let addOns = document.getElementById('add-ons');
-          addOns.firstChild && addOns.removeChild(addOns.firstChild);
-          updateCart();
-          paypal.Button.render(
-            {
-              env: 'sandbox', // sandbox | production
-              // Create a PayPal app: https://developer.paypal.com/developer/applications/create
-              client: {
-                sandbox:
-                // Currently, this is a code for my personal paypal account and definitely will need to be changed
-                  'ARrHtZndH9dLcfMG3bzxFAAtY6fCZcJ7EZcPzdDZ9Zg5tPznHAN2TTEoQ0rL_ijpDPOdzvPhMnayZf4p',
-                // A valid key will need to be added below for payment to work in production
-                production: '<insert production client id>',
-              },
-              // Show the buyer a 'Pay Now' button in the checkout flow
-              commit: true,
-              // payment() is called when the button is clicked
-              payment: (data, actions) => {
-                // Before the payment is processed by paypal, a user's purchase is sent to the server with 
-                // the information that has so far been obtained including the picture.
-                let formData = new FormData();
-                formData.append('file', uploadInput.files[0]);
-                formData.append('cart', JSON.stringify(state.selectedCart));
-                formData.append('quoteId', sessionStorage.getItem('sessionId'));
-                return axios({
-                  method: 'post',
-                  url: '/capture',
-                  data: formData,
-                  config: {
-                    headers: {
-                      'Content-Type': 'multipart/form-data',
-                    },
-                  },
-                }).then(resp => {
-                  // Make a call to the REST api to create the payment
-                  return actions.payment.create({
-                    payment: {
-                      transactions: [
-                        {
-                          amount: {
-                            total: String(
-                              (state.selectedCart.total / 100).toFixed(2),
-                            ),
-                            currency: 'USD',
-                          },
-                        },
-                      ],
-                    },
-                  });
-                });
-              },
-              // onAuthorize() is called when the buyer approves the payment
-              onAuthorize: (data, actions) => {
-                // Make a call to the REST api to execute the payment
-                // This happens when the payment to paypal is completed 
-                return actions.payment
-                  .execute()
-                  .then(() => {
-                    return actions.payment.get().then(order => {
-                      // Once the payment is completed, the payment information is fetched and then sent to the server
-                      // so that it can be stored in the database for future use
-                      let formData = new FormData();
-                      formData.append('file', uploadInput.files[0]);
-                      formData.append(
-                        'cart',
-                        JSON.stringify(state.selectedCart),
-                      );
-                      formData.append('payer', JSON.stringify(order.payer));
-                      formData.append('paymentInfo', JSON.stringify(data));
-                      axios({
-                        method: 'put',
-                        url: '/capture',
-                        data: {
-                          quoteId: sessionStorage.getItem('sessionId'),
-                          payer: JSON.stringify(order.payer),
-                          paymentInfo: JSON.stringify(data),
-                        },
-                      }).then(response => {
-                        window.location = response.data.location;
-                      });
-                    });
-                  })
-                  .catch(e => console.log('error in request: ', e));
+    
+    updateCart();
+    paypal.Button.render(
+      {
+        env: 'sandbox', // sandbox | production
+        // Create a PayPal app: https://developer.paypal.com/developer/applications/create
+        client: {
+          sandbox:
+          // Currently, this is a code for my personal paypal account and definitely will need to be changed
+            'ARrHtZndH9dLcfMG3bzxFAAtY6fCZcJ7EZcPzdDZ9Zg5tPznHAN2TTEoQ0rL_ijpDPOdzvPhMnayZf4p',
+          // A valid key will need to be added below for payment to work in production
+          production: '<insert production client id>',
+        },
+        // Show the buyer a 'Pay Now' button in the checkout flow
+        commit: true,
+        // payment() is called when the button is clicked
+        payment: (data, actions) => {
+          // Before the payment is processed by paypal, a user's purchase is sent to the server with 
+          // the information that has so far been obtained including the picture.
+          let formData = new FormData();
+          formData.append('file', uploadInput.files[0]);
+          formData.append('cart', JSON.stringify(state.selectedCart));
+          formData.append('quoteId', sessionStorage.getItem('sessionId'));
+          return axios({
+            method: 'post',
+            url: '/capture',
+            data: formData,
+            config: {
+              headers: {
+                'Content-Type': 'multipart/form-data',
               },
             },
-            '#paypal-button-container',
-          );
-          let scrollStart = window.pageYOffset;
-          //scrollDown();
-        }
-        //scrollDown();
-      });
+          }).then(resp => {
+            // Make a call to the REST api to create the payment
+            return actions.payment.create({
+              payment: {
+                transactions: [
+                  {
+                    amount: {
+                      total: String(
+                        (state.selectedCart.total / 100).toFixed(2),
+                      ),
+                      currency: 'USD',
+                    },
+                  },
+                ],
+              },
+            });
+          });
+        },
+        // onAuthorize() is called when the buyer approves the payment
+        onAuthorize: (data, actions) => {
+          // Make a call to the REST api to execute the payment
+          // This happens when the payment to paypal is completed 
+          return actions.payment
+            .execute()
+            .then(() => {
+              return actions.payment.get().then(order => {
+                // Once the payment is completed, the payment information is fetched and then sent to the server
+                // so that it can be stored in the database for future use
+                let formData = new FormData();
+                formData.append('file', uploadInput.files[0]);
+                formData.append(
+                  'cart',
+                  JSON.stringify(state.selectedCart),
+                );
+                formData.append('payer', JSON.stringify(order.payer));
+                formData.append('paymentInfo', JSON.stringify(data));
+                axios({
+                  method: 'put',
+                  url: '/capture',
+                  data: {
+                    quoteId: sessionStorage.getItem('sessionId'),
+                    payer: JSON.stringify(order.payer),
+                    paymentInfo: JSON.stringify(data),
+                  },
+                }).then(response => {
+                  window.location = response.data.location;
+                });
+              });
+            })
+            .catch(e => console.log('error in request: ', e));
+        },
+      },
+      '#paypal-button-container',
+    );
+    let scrollStart = window.pageYOffset;
   }
 
   // This function updates the cart based on the additional days and minutes that the user has selected
