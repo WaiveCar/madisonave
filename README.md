@@ -1,0 +1,1 @@
+This project has been consolidated to the [waivescreen project](https://github.com/WaiveCar/WaiveScreen) in a madisonave subdirectory. It was merged following the [SO technique here](https://stackoverflow.com/a/10548919/535759) at 73f9647a580e6b6517d7635cc100ab1db6d6750b.
