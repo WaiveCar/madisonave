@@ -58,7 +58,7 @@ $(function() {
       let previewImage = document.getElementById('preview-image');
       previewImage.src = e.target.result;
       previewImage.style.visibility = 'visible';
-      document.getElementById('upload-holder').style.display = 'none';
+      $("#upload-holder label").html("Change Image");
     };
     reader.readAsDataURL(uploadInput.files[0]);
   });

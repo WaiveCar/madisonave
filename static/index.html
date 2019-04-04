@@ -118,16 +118,8 @@
   line-height: 2rem;
   padding: 1rem;
 }
-#empty-text {
-  padding: 4rem 2rem;
-  background: #eee;
-  text-align: center;
-  font-weight: 800;
-  font-size: 2rem;
-  color: #aaa;
-}
-#amount {
-  font-weight: 800;
+#preview-image {
+  width: 100%;
 }
 
 </style>
@@ -187,22 +179,6 @@
         <div class="container text-info">
           <h1 class="pt-4 title">Promotion</h1>
           <h4>Choose what you want to show</h4>
-          <div class="row ">
-            <div class="col-4">
-              <div id="upload-holder" class="mt-5">
-                <label class="btn btn-info" for="image-upload">
-                  Upload Image
-                </label>
-                <input id="image-upload" class="form-control-file" type="file" name="ad-asset" accept="image/jpeg">
-              </div>
-            </div>
-          </div>
-          <div>Best fit: 1920x756</div>
-          <div class="row justify-content-md-center mt-4">
-            <div class="preview-holder">
-              <img id="preview-image" src="#" alt="">
-            </div>
-          </div>
           <div class="row upload-text">
             <div class="col-12">
               <p>
@@ -212,6 +188,22 @@
               </p>
             </div>
           </div>
+          <div class="row justify-content-md-center mt-4">
+            <div class="preview-holder">
+              <img id="preview-image" src="#" alt="">
+            </div>
+          </div>
+          <div class="row ">
+            <div class="col-4">
+              <div id="upload-holder" class="mt-5">
+                <label class="btn btn-info" for="image-upload">
+                  Upload Image
+                </label>
+                <input id="image-upload" class="form-control-file" type="file" name="ad-asset" accept="image/*">
+              </div>
+            </div>
+          </div>
+          <div>Best fit: 1920x756</div>
         </div>
       </div>
       
